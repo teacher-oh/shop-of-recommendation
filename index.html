@@ -4,7 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="세계의 좋은 상품을 비교하고 추천받는 Shop of Recommendation" />
-  <title>Shop of Recommendation</title>
+  <meta name="theme-color" content="#111318" />
+  <title>Shop of Recommendation — 사기 전에, 추천부터.</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -12,15 +13,8 @@
 </head>
 <body>
   <header class="topbar">
-    <a class="brand" href="#top" aria-label="Shop of Recommendation 홈">
-      <span class="brand-mark">S</span>
-      <span>SHOP <em>OF</em> RECOMMENDATION</span>
-    </a>
-    <nav class="nav">
-      <a href="#discover">둘러보기</a>
-      <a href="#categories">카테고리</a>
-      <a href="#how">추천 기준</a>
-    </nav>
+    <a class="brand" href="#top" aria-label="Shop of Recommendation 홈"><span class="brand-mark">S</span><span>SHOP <em>OF</em> RECOMMENDATION</span></a>
+    <nav class="nav"><a href="#discover">둘러보기</a><a href="#categories">카테고리</a><a href="#how">추천 기준</a></nav>
     <button class="saved-btn" id="savedBtn">♡ 저장 <span id="savedCount">0</span></button>
   </header>
 
@@ -29,83 +23,29 @@
       <div class="hero-copy">
         <span class="eyebrow">GLOBAL PRODUCT CURATION</span>
         <h1>사기 전에,<br><strong>추천부터.</strong></h1>
-        <p>전 세계의 다양한 상품을 한곳에서 비교하고,<br>가격보다 중요한 <b>“왜 추천하는지”</b>까지 확인하세요.</p>
-        <div class="hero-search">
-          <span>⌕</span>
-          <input id="searchInput" type="search" placeholder="상품, 브랜드, 카테고리를 검색해보세요" autocomplete="off" />
-          <button id="searchBtn">검색</button>
-        </div>
-        <div class="quick-tags">
-          <button data-query="헤드폰"># 헤드폰</button>
-          <button data-query="키보드"># 키보드</button>
-          <button data-query="카메라"># 카메라</button>
-          <button data-query="생활"># 생활용품</button>
-        </div>
+        <p>전 세계의 다양한 상품을 한곳에서 비교하고,<br><b>“왜 추천하는지”</b>까지 확인하세요.</p>
+        <div class="hero-search"><span>⌕</span><input id="searchInput" type="search" placeholder="상품, 브랜드, 카테고리를 검색해보세요" autocomplete="off" /><button id="searchBtn">검색</button></div>
+        <div class="quick-tags"><button data-query="헤드폰"># 헤드폰</button><button data-query="키보드"># 키보드</button><button data-query="카메라"># 카메라</button><button data-query="생활"># 생활용품</button></div>
       </div>
-      <div class="hero-card">
-        <div class="floating-label">TODAY'S PICK</div>
-        <div class="hero-product-art">✦</div>
-        <div class="hero-product-info">
-          <span class="country">🇯🇵 JAPAN</span>
-          <h3>SONY WH-1000XM5</h3>
-          <div class="hero-rating">★★★★★ <b>4.8</b></div>
-          <p>“음질·노이즈 캔슬링·착용감의 균형이 뛰어난 무선 헤드폰.”</p>
-        </div>
-      </div>
+      <div class="hero-card"><div class="floating-label">TODAY'S PICK</div><div class="hero-product-art">◉</div><div class="hero-product-info"><span class="country">🇯🇵 JAPAN · SONY</span><h3>WH-1000XM5</h3><div class="hero-rating">★★★★★ <b>4.8</b></div><p>“음질·노이즈 캔슬링·착용감의 균형이 뛰어난 무선 헤드폰.”</p></div></div>
     </section>
 
-    <section class="stats">
-      <div><strong>1,240+</strong><span>큐레이션 상품</span></div>
-      <div><strong>38</strong><span>국가</span></div>
-      <div><strong>4.6/5</strong><span>평균 추천점수</span></div>
-      <div><strong>실시간</strong><span>가격 비교 준비</span></div>
+    <section class="stats"><div><strong>12</strong><span>큐레이션 상품</span></div><div><strong>8</strong><span>국가</span></div><div><strong>4.5/5</strong><span>평균 추천점수</span></div><div><strong>비교 가능</strong><span>구매처 연결</span></div></section>
+
+    <section class="section" id="categories"><div class="section-head"><div><span class="eyebrow">EXPLORE</span><h2>카테고리</h2></div></div><div class="category-grid">
+      <button class="category active" data-category="all"><span>✦</span><b>전체</b><small>ALL PRODUCTS</small></button><button class="category" data-category="audio"><span>◉</span><b>오디오</b><small>AUDIO</small></button><button class="category" data-category="tech"><span>⌨</span><b>테크</b><small>TECH</small></button><button class="category" data-category="camera"><span>◎</span><b>카메라</b><small>CAMERA</small></button><button class="category" data-category="living"><span>◇</span><b>생활</b><small>LIVING</small></button><button class="category" data-category="fashion"><span>◈</span><b>패션</b><small>FASHION</small></button>
+    </div></section>
+
+    <section class="section" id="discover"><div class="section-head results-head"><div><span class="eyebrow">CURATED FOR YOU</span><h2>추천 상품 <small id="resultCount"></small></h2></div><div class="sort-wrap"><label for="sortSelect">정렬</label><select id="sortSelect"><option value="recommend">추천순</option><option value="rating">평점순</option><option value="price-low">가격 낮은순</option><option value="price-high">가격 높은순</option></select></div></div>
+      <div class="filter-row"><button class="filter active" data-filter="all">전체</button><button class="filter" data-filter="best">BEST</button><button class="filter" data-filter="value">가성비</button><button class="filter" data-filter="new">신상품</button></div>
+      <div class="demo-banner"><b>현재 데모 버전</b><span>상품·평점·기준가는 샘플 데이터이며, 구매 버튼은 각 브랜드/판매처로 연결됩니다. 실시간 가격·재고 API 연결을 위한 구조는 준비되어 있습니다.</span></div>
+      <div id="productGrid" class="product-grid"></div><div id="emptyState" class="empty" hidden>조건에 맞는 상품이 없어요.<br><button id="resetBtn">필터 초기화</button></div>
     </section>
 
-    <section class="section" id="categories">
-      <div class="section-head"><div><span class="eyebrow">EXPLORE</span><h2>카테고리</h2></div></div>
-      <div class="category-grid">
-        <button class="category active" data-category="all"><span>✦</span><b>전체</b><small>ALL PRODUCTS</small></button>
-        <button class="category" data-category="audio"><span>◉</span><b>오디오</b><small>AUDIO</small></button>
-        <button class="category" data-category="tech"><span>⌨</span><b>테크</b><small>TECH</small></button>
-        <button class="category" data-category="camera"><span>◎</span><b>카메라</b><small>CAMERA</small></button>
-        <button class="category" data-category="living"><span>◇</span><b>생활</b><small>LIVING</small></button>
-        <button class="category" data-category="fashion"><span>◈</span><b>패션</b><small>FASHION</small></button>
-      </div>
-    </section>
-
-    <section class="section" id="discover">
-      <div class="section-head results-head">
-        <div><span class="eyebrow">CURATED FOR YOU</span><h2>추천 상품</h2></div>
-        <div class="sort-wrap"><label for="sortSelect">정렬</label><select id="sortSelect"><option value="recommend">추천순</option><option value="rating">평점순</option><option value="price-low">가격 낮은순</option><option value="price-high">가격 높은순</option></select></div>
-      </div>
-      <div class="filter-row">
-        <button class="filter active" data-filter="all">전체</button>
-        <button class="filter" data-filter="best">BEST</button>
-        <button class="filter" data-filter="value">가성비</button>
-        <button class="filter" data-filter="new">신상품</button>
-      </div>
-      <div id="productGrid" class="product-grid"></div>
-      <div id="emptyState" class="empty" hidden>조건에 맞는 상품이 없어요.<br><button id="resetBtn">필터 초기화</button></div>
-    </section>
-
-    <section class="why" id="how">
-      <div><span class="eyebrow">WHY US</span><h2>별점만 보여주는<br>쇼핑 사이트가 아닙니다.</h2></div>
-      <div class="why-grid">
-        <article><span>01</span><h3>종합 추천점수</h3><p>단순 평균 별점이 아니라 품질, 가격, 디자인, 사용성 등을 함께 평가합니다.</p></article>
-        <article><span>02</span><h3>구매처 비교</h3><p>여러 판매처의 가격과 구매 가능 여부를 비교해 가장 합리적인 선택을 돕습니다.</p></article>
-        <article><span>03</span><h3>한눈에 보는 리뷰</h3><p>장점과 단점, 추천 대상, 핵심 포인트를 빠르게 확인할 수 있습니다.</p></article>
-      </div>
-    </section>
+    <section class="why" id="how"><div><span class="eyebrow">WHY US</span><h2>별점만 보여주는<br>쇼핑 사이트가 아닙니다.</h2></div><div class="why-grid"><article><span>01</span><h3>종합 추천점수</h3><p>품질, 가격, 디자인, 사용성을 따로 평가해 어떤 부분에서 좋은지 보여줍니다.</p></article><article><span>02</span><h3>구매처 비교</h3><p>공식 판매처와 글로벌 구매처를 한곳에서 확인하고 직접 이동할 수 있습니다.</p></article><article><span>03</span><h3>한눈에 보는 리뷰</h3><p>장점·아쉬운 점·추천 대상을 상품 상세 화면에서 빠르게 확인할 수 있습니다.</p></article></div></section>
   </main>
 
-  <div class="modal" id="productModal" aria-hidden="true">
-    <div class="modal-backdrop" data-close></div>
-    <article class="modal-card">
-      <button class="close" data-close aria-label="닫기">×</button>
-      <div id="modalContent"></div>
-    </article>
-  </div>
-
+  <div class="modal" id="productModal" aria-hidden="true"><div class="modal-backdrop" data-close></div><article class="modal-card"><button class="close" data-close aria-label="닫기">×</button><div id="modalContent"></div></article></div>
   <footer><div class="brand footer-brand"><span class="brand-mark">S</span><span>SHOP OF RECOMMENDATION</span></div><p>좋은 상품을 찾는 시간을 줄이고, 더 나은 선택을 돕습니다.</p><small>© 2026 Shop of Recommendation</small></footer>
   <script src="app.js"></script>
 </body>
