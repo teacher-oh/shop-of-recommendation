@@ -1,0 +1,8 @@
+{
+  "name":"shop-of-recommendation",
+  "private":true,
+  "version":"1.0.0",
+  "description":"Multi-source product discovery and recommendation collector",
+  "scripts":{"collect":"node collector/index.js"},
+  "engines":{"node":">=20"}
+}
