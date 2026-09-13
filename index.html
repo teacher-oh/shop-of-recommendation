@@ -7,13 +7,74 @@
 <body>
 <header class="topbar"><a class="brand" href="#top"><span class="brand-mark">S</span><span>SHOP <em>OF</em> RECOMMENDATION</span></a><nav><a href="#discover">추천</a><a href="#categories">카테고리</a><a href="#guide">추천 기준</a></nav><button class="saved-btn" id="savedBtn">♡ 저장 <b id="savedCount">0</b></button></header>
 <main id="top">
-<section class="hero"><div class="hero-copy"><span class="eyebrow">SMART PRODUCT DISCOVERY</span><h1>사기 전에,<br><strong>나에게 맞는 선택.</strong></h1><p>가격만 비교하지 않습니다. <b>품질 · 가치 · 리뷰 신호 · 구매처</b>를 함께 보고 선택하기 쉽게 정리합니다.</p><div class="search"><span>⌕</span><input id="searchInput" type="search" placeholder="상품, 브랜드, 카테고리를 검색" autocomplete="off"><button id="searchBtn">검색</button></div><div class="chips"><button data-query="headphones">헤드폰</button><button data-query="laptop">노트북</button><button data-query="camera">카메라</button><button data-query="coffee">커피</button><button data-query="backpack">가방</button></div><div class="hero-actions"><button class="primary" id="surpriseBtn">✨ 지금 추천받기</button><button class="ghost" id="recentBtn">최근 본 상품</button></div></div><div class="hero-stage"><div class="orb orb-a"></div><div class="orb orb-b"></div><div class="stage-label">LIVE CATALOG</div><div class="stage-icon">✦</div><div class="stage-title">오늘의 발견</div><div class="stage-copy">여러 소스의 상품 데이터를<br>같은 기준으로 정리합니다.</div><div class="stage-foot"><span><b id="liveProductCount">48+</b> products</span><span id="liveStatus">DEMO DATA</span></div></div></section>
-<section class="trust"><div><b id="sourceCount">4</b><span>연동 가능한 소스</span></div><div><b>6시간</b><span>자동 수집 주기</span></div><div><b>27+</b><span>카테고리</span></div><div><b>개인화</b><span>저장·최근·추천</span></div></section>
-<section class="section" id="categories"><div class="section-head"><div><span class="eyebrow">EXPLORE</span><h2>관심 분야부터</h2><p>필요한 것만 빠르게 좁혀보세요.</p></div></div><div id="categoryGrid" class="category-grid"></div></section>
-<section class="section" id="discover"><div class="section-head results-head"><div><span class="eyebrow">CURATED RESULTS</span><h2>추천 상품 <small id="resultCount"></small></h2></div><div class="controls"><button id="compareBtn" class="compare-btn" disabled>비교 <b id="compareCount">0</b></button><select id="sortSelect"><option value="recommend">추천순</option><option value="rating">평점순</option><option value="value">가성비순</option><option value="price-low">가격 낮은순</option><option value="price-high">가격 높은순</option></select></div></div><div class="filter-row"><button class="filter active" data-filter="all">전체</button><button class="filter" data-filter="best">BEST</button><button class="filter" data-filter="value">가성비</button><button class="filter" data-filter="new">신상품</button><button class="filter" data-filter="saved">저장됨</button></div><div id="dataBanner" class="data-banner"><b>데이터 준비 중</b><span>실시간 카탈로그가 연결되면 가격·이미지·평점·구매처가 자동으로 업데이트됩니다.</span></div><div id="productGrid" class="product-grid"></div><div id="emptyState" class="empty" hidden>조건에 맞는 상품이 없어요.<button id="resetBtn">필터 초기화</button></div></section>
-<section class="guide" id="guide"><div><span class="eyebrow">HOW IT WORKS</span><h2>좋은 상품보다<br><strong>좋은 선택</strong>을 찾습니다.</h2></div><div class="guide-grid"><article><i>01</i><h3>여러 구매처 수집</h3><p>공식 API로 가져온 상품을 하나의 형식으로 정리해 비교할 수 있게 만듭니다.</p></article><article><i>02</i><h3>추천 점수 계산</h3><p>가격·평점·리뷰 수·정보 완성도 같은 신호를 종합해 단순 별점 이상의 기준을 제공합니다.</p></article><article><i>03</i><h3>직접 비교</h3><p>저장, 최근 본 상품, 최대 3개 비교 기능으로 결정까지의 시간을 줄입니다.</p></article></div></section>
+<section class="hero"><div class="hero-copy"><span class="eyebrow">SMART PRODUCT DISCOVERY</span><h1>사기 전에,<br><strong>나에게 맞는 선택.</strong></h1><p>가격만 비교하지 않습니다. <b>품질 · 가치 · 리뷰 신호 · 구매처</b>를 함께 보고 선택하기 쉽게 정리합니다.</p><div class="search"><span>⌕</span><input id="searchInput" type="search" placeholder="상품, 브랜드, 카테고리를 검색 / Search products, brands, categories" autocomplete="off"><button id="searchBtn">검색 · Search</button></div><div class="chips"><button data-query="headphones">헤드폰 · Headphones</button><button data-query="laptop">노트북 · Laptop</button><button data-query="camera">카메라 · Camera</button><button data-query="coffee">커피 · Coffee</button><button data-query="backpack">가방 · Backpack</button></div><div class="hero-actions"><button class="primary" id="surpriseBtn">✨ 지금 추천받기</button><button class="ghost" id="recentBtn">최근 본 상품</button></div></div><div class="hero-stage"><div class="orb orb-a"></div><div class="orb orb-b"></div><div class="stage-label">LIVE CATALOG</div><div class="stage-icon">✦</div><div class="stage-title">오늘의 발견</div><div class="stage-copy">여러 소스의 상품 데이터를<br>같은 기준으로 정리합니다.</div><div class="stage-foot"><span><b id="liveProductCount">48+</b> products</span><span id="liveStatus">DEMO DATA</span></div></div></section>
+<section class="trust"><div><b id="sourceCount">4</b><span>연동 가능한 소스 · Sources</span></div><div><b>6시간</b><span>자동 수집 주기 · Refresh</span></div><div><b>27+</b><span>카테고리 · Categories</span></div><div><b>개인화</b><span>저장·최근·추천 · Personalization</span></div></section>
+<section class="section" id="categories"><div class="section-head"><div><span class="eyebrow">EXPLORE</span><h2>관심 분야부터</h2><p>필요한 것만 빠르게 좁혀보세요. · Explore by category.</p></div></div><div id="categoryGrid" class="category-grid"></div></section>
+<section class="section" id="discover"><div class="section-head results-head"><div><span class="eyebrow">CURATED RESULTS</span><h2>추천 상품 <small id="resultCount"></small></h2></div><div class="controls"><button id="compareBtn" class="compare-btn" disabled>비교 <b id="compareCount">0</b></button><select id="sortSelect"><option value="recommend">추천순 · Recommended</option><option value="rating">평점순 · Rating</option><option value="value">가성비순 · Value</option><option value="price-low">가격 낮은순 · Price low</option><option value="price-high">가격 높은순 · Price high</option></select></div></div><div class="filter-row"><button class="filter active" data-filter="all">전체 · All</button><button class="filter" data-filter="best">BEST</button><button class="filter" data-filter="value">가성비 · Value</button><button class="filter" data-filter="new">신상품 · New</button><button class="filter" data-filter="saved">저장됨 · Saved</button></div><div id="dataBanner" class="data-banner"><b>데이터 준비 중 · Preparing data</b><span>실시간 카탈로그가 연결되면 가격·이미지·평점·구매처가 자동으로 업데이트됩니다. Prices, images, ratings and sellers update automatically.</span></div><div id="productGrid" class="product-grid"></div><div id="emptyState" class="empty" hidden>조건에 맞는 상품이 없어요. No matching products.<button id="resetBtn">필터 초기화 · Reset</button></div></section>
+<section class="guide" id="guide"><div><span class="eyebrow">HOW IT WORKS</span><h2>좋은 상품보다<br><strong>좋은 선택</strong>을 찾습니다.</h2></div><div class="guide-grid"><article><i>01</i><h3>여러 구매처 수집 · Multiple sources</h3><p>공식 API로 가져온 상품을 하나의 형식으로 정리해 비교할 수 있게 만듭니다.</p></article><article><i>02</i><h3>추천 점수 계산 · Recommendation</h3><p>가격·평점·리뷰 수·정보 완성도 같은 신호를 종합해 단순 별점 이상의 기준을 제공합니다.</p></article><article><i>03</i><h3>직접 비교 · Compare</h3><p>저장, 최근 본 상품, 최대 3개 비교 기능으로 결정까지의 시간을 줄입니다.</p></article></div></section>
 </main>
 <div class="modal" id="modal" aria-hidden="true"><div class="backdrop" data-close></div><article class="modal-card"><button class="close" data-close>×</button><div id="modalContent"></div></article></div>
-<footer><div class="brand"><span class="brand-mark">S</span><span>SHOP OF RECOMMENDATION</span></div><p>좋은 상품을 찾는 시간을 줄이고 더 나은 선택을 돕습니다.</p><small>© 2026</small></footer>
+<footer><div class="brand"><span class="brand-mark">S</span><span>SHOP OF RECOMMENDATION</span></div><p>좋은 상품을 찾는 시간을 줄이고 더 나은 선택을 돕습니다. · Find better products, faster.</p><small>© 2026</small></footer>
+<script>
+// Bilingual search bridge: Korean and English terms are expanded before the main search handler runs.
+(function(){
+  const aliases={
+    '헤드폰':['headphones','headphone','audio'], '이어폰':['earbuds','earphones','headphones','audio'],
+    '노트북':['laptop','notebook','computer'], '컴퓨터':['computer','computers','laptop'],
+    '휴대폰':['phone','smartphone','mobile'], '스마트폰':['smartphone','smartphones','phone','mobile'],
+    '태블릿':['tablet','tablets'], '카메라':['camera','cameras'], '게임':['gaming','game','console'],
+    '콘솔':['console','gaming'], '티비':['tv','television','display'], '텔레비전':['tv','television','display'],
+    '냉장고':['refrigerator','fridge','appliance'], '세탁기':['washing machine','washer','appliance'],
+    '에어컨':['air conditioner','aircon','appliance'], '청소기':['vacuum','vacuum cleaner','appliance'],
+    '생활가전':['appliance','home appliances'], '가전':['appliance','electronics'],
+    '가구':['furniture'], '주방':['kitchen','kitchen accessories'], '커피':['coffee'], '식품':['food','groceries'],
+    '뷰티':['beauty','skin care'], '화장품':['beauty','cosmetics','skin care'], '패션':['fashion','clothing'],
+    '신발':['shoes','shoe'], '가방':['bags','bag','backpack'], '여행':['travel','luggage'],
+    '운동':['sports','sport','fitness'], '스포츠':['sports','sport'], '아웃도어':['outdoor'],
+    '문구':['stationery','office'], '반려동물':['pet','pets'], '자동차':['car','vehicle','automotive'],
+    '조명':['lighting','light'], '장난감':['toys','kids'], '키즈':['kids','kid'], '취미':['hobby'],
+    '전자제품':['electronics','electronic'], '스마트홈':['smart home','smart-home'],
+    'headphones':['헤드폰','headphone','audio'], 'headphone':['헤드폰','headphones','audio'],
+    'laptop':['노트북','notebook','computer'], 'computer':['컴퓨터','laptop'], 'smartphone':['스마트폰','휴대폰','mobile'],
+    'phone':['휴대폰','스마트폰','mobile'], 'camera':['카메라'], 'gaming':['게임','console'], 'console':['게임','gaming'],
+    'tv':['티비','텔레비전','display'], 'refrigerator':['냉장고','fridge'], 'fridge':['냉장고','refrigerator'],
+    'washing machine':['세탁기','washer'], 'washer':['세탁기','washing machine'], 'vacuum':['청소기','vacuum cleaner'],
+    'coffee':['커피'], 'food':['식품','groceries'], 'groceries':['식품','food'], 'beauty':['뷰티','cosmetics'],
+    'fashion':['패션','clothing'], 'shoes':['신발'], 'bag':['가방','backpack'], 'backpack':['가방','bag'],
+    'travel':['여행','luggage'], 'sports':['스포츠','운동','fitness'], 'outdoor':['아웃도어'], 'stationery':['문구','office'],
+    'pet':['반려동물'], 'car':['자동차','vehicle'], 'vehicle':['자동차','car'], 'lighting':['조명'], 'hobby':['취미'], 'kids':['키즈','장난감']
+  };
+  function expand(value){
+    const raw=String(value||'').trim(); if(!raw)return raw;
+    const key=raw.toLowerCase(); const terms=[raw];
+    Object.keys(aliases).forEach(k=>{if(key===k.toLowerCase() || key.includes(k.toLowerCase())) terms.push(...aliases[k]);});
+    return [...new Set(terms)].join(' ');
+  }
+  const input=document.getElementById('searchInput');
+  if(input) input.addEventListener('input',function(){
+    const expanded=expand(input.value);
+    if(expanded!==input.value){
+      input.dataset.searchExpanded=expanded;
+    } else delete input.dataset.searchExpanded;
+  },true);
+  window.__sorExpandSearch=expand;
+})();
+</script>
 <script src="app.js"></script>
+<script>
+// Patch the app's search input without changing the visible query text.
+(function(){
+  const input=document.getElementById('searchInput');
+  if(!input || !window.__sorExpandSearch)return;
+  input.addEventListener('input',function(){
+    const expanded=window.__sorExpandSearch(input.value);
+    if(expanded!==input.value){
+      const original=input.value;
+      input.value=expanded;
+      input.dispatchEvent(new Event('input',{bubbles:true}));
+      input.value=original;
+    }
+  });
+})();
+</script>
 </body></html>
