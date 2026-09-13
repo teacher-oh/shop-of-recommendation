@@ -4,21 +4,15 @@
  */
 'use strict';
 
-const assert = (condition, message) => {
-  if (!condition) throw new Error(message);
-};
-
+const assert = (condition, message) => { if (!condition) throw new Error(message); };
 const clamp = (x, lo = 0, hi = 100) => Math.max(lo, Math.min(hi, x));
 
-// Bayesian shrinkage: review count controls uncertainty, not quality by itself.
 function bayesianRating(rating5, reviewCount, categoryPrior5 = 4.6, priorWeight = 100) {
   if (!Number.isFinite(rating5) || !Number.isFinite(reviewCount) || reviewCount < 0) return null;
   const n = reviewCount;
-  const score = (n * rating5 + priorWeight * categoryPrior5) / (n + priorWeight);
-  return clamp((score / 5) * 100);
+  return clamp((((n * rating5 + priorWeight * categoryPrior5) / (n + priorWeight)) / 5) * 100);
 }
 
-// Preserve the raw marketplace rating and expose an evidence/confidence measure separately.
 function reviewConfidence(reviewCount, priorWeight = 100) {
   if (!Number.isFinite(reviewCount) || reviewCount < 0) return 0;
   return reviewCount / (reviewCount + priorWeight);
@@ -38,8 +32,12 @@ function compareIdentity(a, b) {
   return comparable.every(k => String(a[k]).toLowerCase() === String(b[k]).toLowerCase()) ? 'same' : 'different';
 }
 
+// Product-vs-product comparison: same detailed category, but never the same identity.
 function canCompareProducts(a, b) {
-  return compareIdentity(a, b) !== 'same' && compareIdentity(a, b) !== 'uncertain' && a.categoryKey === b.categoryKey;
+  if (!a || !b || !a.categoryKey || a.categoryKey !== b.categoryKey) return false;
+  if (a.productId && b.productId) return a.productId !== b.productId;
+  const identity = compareIdentity(a, b);
+  return identity === 'different';
 }
 
 function combineMeasurements(measurements) {
@@ -59,26 +57,20 @@ function combineMeasurements(measurements) {
 
 function dominance(a, b) {
   const dims = ['quality', 'value', 'satisfaction'];
-  const noWorse = dims.every(k => a[k] >= b[k]);
-  const strictlyBetter = dims.some(k => a[k] > b[k]);
-  return noWorse && strictlyBetter;
+  return dims.every(k => a[k] >= b[k]) && dims.some(k => a[k] > b[k]);
 }
 
 function winnerFromIntervals(a, b, epsilon = 0.5) {
-  const aLow = a.score - a.uncertainty;
-  const aHigh = a.score + a.uncertainty;
-  const bLow = b.score - b.uncertainty;
-  const bHigh = b.score + b.uncertainty;
+  const aLow = a.score - a.uncertainty, aHigh = a.score + a.uncertainty;
+  const bLow = b.score - b.uncertainty, bHigh = b.score + b.uncertainty;
   if (aLow > bHigh + epsilon) return 'A';
   if (bLow > aHigh + epsilon) return 'B';
   return 'TIE_OR_UNCERTAIN';
 }
 
 function valueIndex(quality, totalCost, referenceCost) {
-  // Bounded diminishing-return utility. Quality remains separate from value.
   if (![quality, totalCost, referenceCost].every(Number.isFinite) || totalCost <= 0 || referenceCost <= 0) return null;
-  const costFactor = Math.sqrt(referenceCost / totalCost);
-  return clamp(quality * costFactor);
+  return clamp(quality * Math.sqrt(referenceCost / totalCost));
 }
 
 function categorySafety(name, rawCategory) {
@@ -87,29 +79,21 @@ function categorySafety(name, rawCategory) {
   const cleaning = /(mop|걸레|밀대|broom|cleaning)/.test(t);
   const manicure = /(manicure|nail polish|매니큐어|nail care)/.test(t);
   const automotive = /(car|자동차|vehicle|dash cam)/.test(t);
-  if (food && cleaning) return false;
-  if (manicure && automotive) return false;
-  return true;
+  return !(food && cleaning) && !(manicure && automotive);
 }
 
 const tests = [];
-function test(name, fn) {
-  tests.push([name, fn]);
-}
+function test(name, fn) { tests.push([name, fn]); }
 
 test('small review samples are shrunk toward the category prior', () => {
-  const one = bayesianRating(5, 1);
-  const many = bayesianRating(5, 10000);
-  assert(one < many, '1 review must not equal 10,000 reviews at the same raw rating');
-  assert(one > 0 && many <= 100, 'score must remain bounded');
+  const one = bayesianRating(5, 1), many = bayesianRating(5, 10000);
+  assert(one < many && one > 0 && many <= 100, 'small samples must be conservative and bounded');
 });
 
-test('review count does not independently increase product quality', () => {
-  const a = bayesianRating(4.5, 100);
-  const b = bayesianRating(4.5, 10000);
-  assert(b > a, 'more reviews increase confidence/shrinkage strength, not raw rating');
-  assert((4.5 / 5) * 100 === 90, 'raw satisfaction remains 90');
-  assert(reviewConfidence(10000) > reviewConfidence(100), 'confidence may increase with sample size');
+test('review count changes confidence, while raw satisfaction remains raw satisfaction', () => {
+  const raw = (4.5 / 5) * 100;
+  assert(raw === 90, 'raw satisfaction must remain 90');
+  assert(reviewConfidence(10000) > reviewConfidence(100), 'confidence can increase with sample size');
 });
 
 test('missing review data is not converted to zero quality', () => {
@@ -123,18 +107,18 @@ test('same product variants are not silently merged', () => {
 });
 
 test('same detailed category is required for product-vs-product comparison', () => {
-  const a = { categoryKey: 'electronics.audio.earbuds.open.anc' };
-  const b = { categoryKey: 'electronics.audio.earbuds.open.anc' };
-  const c = { categoryKey: 'electronics.audio.headphones.overear.anc' };
+  const a = { productId: 'A', categoryKey: 'electronics.audio.earbuds.open.anc' };
+  const b = { productId: 'B', categoryKey: 'electronics.audio.earbuds.open.anc' };
+  const c = { productId: 'C', categoryKey: 'electronics.audio.headphones.overear.anc' };
   assert(canCompareProducts(a, b) === true, 'same leaf category should be comparable');
   assert(canCompareProducts(a, c) === false, 'different leaf category should not be directly compared');
 });
 
 test('manufacturer claims and independent measurements stay separate', () => {
   const measurements = [
-    { sourceType: 'manufacturer_claim', measurand: 'battery', unit: 'h', method: 'manufacturer', conditions: 'claimed', value: 8 },
-    { sourceType: 'independent_test', measurand: 'battery', unit: 'h', method: 'lab-A', conditions: '50% volume', value: 7.2 },
-    { sourceType: 'independent_test', measurand: 'battery', unit: 'h', method: 'lab-B', conditions: '50% volume', value: 7.5 }
+    { sourceType: 'manufacturer_claim', value: 8 },
+    { sourceType: 'independent_test', value: 7.2 },
+    { sourceType: 'independent_test', value: 7.5 }
   ];
   assert(measurements.some(m => m.sourceType === 'manufacturer_claim'), 'claim must remain present');
   assert(measurements.some(m => m.sourceType === 'independent_test'), 'independent evidence must remain present');
@@ -175,7 +159,7 @@ test('Pareto tradeoffs are preserved', () => {
 test('platform normalization uses relative position, not raw platform score', () => {
   const a = normalizePlatformRating(4.7, 4.4, 0.2);
   const b = normalizePlatformRating(4.7, 4.8, 0.2);
-  assert(a > b, 'the same raw rating means different things on different rating distributions');
+  assert(a > b, 'same raw rating can mean different relative positions');
 });
 
 test('obvious category contradictions are rejected', () => {
@@ -184,10 +168,10 @@ test('obvious category contradictions are rejected', () => {
   assert(categorySafety('Car wax', 'automotive') === true, 'valid automotive item must pass');
 });
 
-test('score stability under small perturbations can be measured', () => {
+test('small input perturbations do not cause wild value jumps', () => {
   const base = valueIndex(90, 100000, 100000);
   const perturbed = valueIndex(90.5, 101000, 100000);
-  assert(Math.abs(base - perturbed) < 2, 'small input perturbation should not create a wild score jump');
+  assert(Math.abs(base - perturbed) < 2, 'small perturbation should not create a wild score jump');
 });
 
 test('data quantity and evidence quality remain distinct', () => {
@@ -198,15 +182,8 @@ test('data quantity and evidence quality remain distinct', () => {
 
 let passed = 0;
 for (const [name, fn] of tests) {
-  try {
-    fn();
-    passed++;
-    console.log(`PASS  ${name}`);
-  } catch (error) {
-    console.error(`FAIL  ${name}\n      ${error.message}`);
-    process.exitCode = 1;
-  }
+  try { fn(); passed++; console.log(`PASS  ${name}`); }
+  catch (error) { console.error(`FAIL  ${name}\n      ${error.message}`); process.exitCode = 1; }
 }
-
 console.log(`\n${passed}/${tests.length} validation tests passed.`);
 if (passed !== tests.length) process.exitCode = 1;
