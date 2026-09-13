@@ -1,0 +1,20 @@
+{
+  "apiVersion": "mock-v1",
+  "mock": true,
+  "generatedAt": "2026-09-13T08:16:59.231Z",
+  "endpoints": {
+    "products": "./products.json",
+    "reviews": "./reviews.json",
+    "categories": "./categories.json",
+    "brands": "./brands.json",
+    "productByCategory": "./products.json?category=<categoryId>",
+    "productByBrand": "./products.json?brand=<brandId>",
+    "reviewsByProduct": "./reviews.json?productId=<productId>"
+  },
+  "counts": {
+    "products": 40,
+    "reviews": 200,
+    "categories": 10,
+    "brands": 10
+  }
+}

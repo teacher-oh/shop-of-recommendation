@@ -1,0 +1,56 @@
+{
+  "apiVersion": "mock-v1",
+  "mock": true,
+  "categories": [
+    {
+      "id": "food.ramen",
+      "name": "식품 > 라면",
+      "productCount": 4
+    },
+    {
+      "id": "food.snack",
+      "name": "식품 > 과자",
+      "productCount": 4
+    },
+    {
+      "id": "food.coffee",
+      "name": "식품 > 커피",
+      "productCount": 4
+    },
+    {
+      "id": "household.cleaning",
+      "name": "생활용품 > 청소/세탁",
+      "productCount": 4
+    },
+    {
+      "id": "household.kitchen",
+      "name": "생활용품 > 주방",
+      "productCount": 4
+    },
+    {
+      "id": "electronics.audio",
+      "name": "가전/전자 > 음향",
+      "productCount": 4
+    },
+    {
+      "id": "electronics.computing",
+      "name": "가전/전자 > 컴퓨터 주변기기",
+      "productCount": 4
+    },
+    {
+      "id": "electronics.home",
+      "name": "가전/전자 > 생활가전",
+      "productCount": 4
+    },
+    {
+      "id": "lifestyle.bag",
+      "name": "생활/문구 > 가방",
+      "productCount": 4
+    },
+    {
+      "id": "lifestyle.stationery",
+      "name": "생활/문구 > 문구",
+      "productCount": 4
+    }
+  ]
+}

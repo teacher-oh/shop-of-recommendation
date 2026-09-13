@@ -1,0 +1,66 @@
+{
+  "apiVersion": "mock-v1",
+  "mock": true,
+  "brands": [
+    {
+      "id": "mock-kitchen",
+      "name": "Mock Kitchen",
+      "country": "KR",
+      "productCount": 4
+    },
+    {
+      "id": "mock-snack-lab",
+      "name": "Mock Snack Lab",
+      "country": "KR",
+      "productCount": 4
+    },
+    {
+      "id": "mock-coffee-works",
+      "name": "Mock Coffee Works",
+      "country": "KR",
+      "productCount": 4
+    },
+    {
+      "id": "mock-home",
+      "name": "Mock Home",
+      "country": "KR",
+      "productCount": 4
+    },
+    {
+      "id": "mock-kitchenware",
+      "name": "Mock Kitchenware",
+      "country": "KR",
+      "productCount": 4
+    },
+    {
+      "id": "mock-audio",
+      "name": "Mock Audio",
+      "country": "GLOBAL",
+      "productCount": 4
+    },
+    {
+      "id": "mock-tech",
+      "name": "Mock Tech",
+      "country": "GLOBAL",
+      "productCount": 4
+    },
+    {
+      "id": "mock-home-tech",
+      "name": "Mock Home Tech",
+      "country": "GLOBAL",
+      "productCount": 4
+    },
+    {
+      "id": "mock-carry",
+      "name": "Mock Carry",
+      "country": "KR",
+      "productCount": 4
+    },
+    {
+      "id": "mock-stationery",
+      "name": "Mock Stationery",
+      "country": "KR",
+      "productCount": 4
+    }
+  ]
+}
