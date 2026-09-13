@@ -1,16 +1,50 @@
 {
-  "generatedAt": "2026-09-13T08:00:00.000Z",
-  "source": "DummyJSON",
-  "count": 9,
-  "products": [
-    {"id":"dummyjson-1","source":"dummyjson","sourceId":"1","brand":"Essence","name":"Essence Mascara Lash Princess","category":"beauty","price":9.99,"currency":"USD","image":"https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/thumbnail.webp","rating":2.56,"reviewCount":3,"url":"https://dummyjson.com/products/1","seller":"DummyJSON demo catalog"},
-    {"id":"dummyjson-2","source":"dummyjson","sourceId":"2","brand":"Glamour Beauty","name":"Eyeshadow Palette with Mirror","category":"beauty","price":19.99,"currency":"USD","image":"https://cdn.dummyjson.com/product-images/beauty/eyeshadow-palette-with-mirror/thumbnail.webp","rating":2.86,"reviewCount":3,"url":"https://dummyjson.com/products/2","seller":"DummyJSON demo catalog"},
-    {"id":"dummyjson-3","source":"dummyjson","sourceId":"3","brand":"Velvet Touch","name":"Powder Canister","category":"beauty","price":14.99,"currency":"USD","image":"https://cdn.dummyjson.com/product-images/beauty/powder-canister/thumbnail.webp","rating":4.64,"reviewCount":3,"url":"https://dummyjson.com/products/3","seller":"DummyJSON demo catalog"},
-    {"id":"dummyjson-4","source":"dummyjson","sourceId":"4","brand":"Chic Cosmetics","name":"Red Lipstick","category":"beauty","price":12.99,"currency":"USD","image":"https://cdn.dummyjson.com/product-images/beauty/red-lipstick/thumbnail.webp","rating":4.36,"reviewCount":3,"url":"https://dummyjson.com/products/4","seller":"DummyJSON demo catalog"},
-    {"id":"dummyjson-5","source":"dummyjson","sourceId":"5","brand":"Nail Couture","name":"Red Nail Polish","category":"beauty","price":8.99,"currency":"USD","image":"https://cdn.dummyjson.com/product-images/beauty/red-nail-polish/thumbnail.webp","rating":4.32,"reviewCount":3,"url":"https://dummyjson.com/products/5","seller":"DummyJSON demo catalog"},
-    {"id":"dummyjson-6","source":"dummyjson","sourceId":"6","brand":"Calvin Klein","name":"Calvin Klein CK One","category":"beauty","price":49.99,"currency":"USD","image":"https://cdn.dummyjson.com/product-images/fragrances/calvin-klein-ck-one/thumbnail.webp","rating":4.37,"reviewCount":3,"url":"https://dummyjson.com/products/6","seller":"DummyJSON demo catalog"},
-    {"id":"dummyjson-7","source":"dummyjson","sourceId":"7","brand":"Chanel","name":"Chanel Coco Noir Eau De","category":"beauty","price":129.99,"currency":"USD","image":"https://cdn.dummyjson.com/product-images/fragrances/chanel-coco-noir-eau-de/thumbnail.webp","rating":4.26,"reviewCount":3,"url":"https://dummyjson.com/products/7","seller":"DummyJSON demo catalog"},
-    {"id":"dummyjson-8","source":"dummyjson","sourceId":"8","brand":"Dior","name":"Dior J'adore","category":"beauty","price":89.99,"currency":"USD","image":"https://cdn.dummyjson.com/product-images/fragrances/dior-j'adore/thumbnail.webp","rating":3.8,"reviewCount":3,"url":"https://dummyjson.com/products/8","seller":"DummyJSON demo catalog"},
-    {"id":"dummyjson-9","source":"dummyjson","sourceId":"9","brand":"Dolce & Gabbana","name":"Dolce Shine Eau de","category":"beauty","price":69.99,"currency":"USD","image":"https://cdn.dummyjson.com/product-images/fragrances/dolce-shine-eau-de/thumbnail.webp","rating":3.96,"reviewCount":3,"url":"https://dummyjson.com/products/9","seller":"DummyJSON demo catalog"}
-  ]
+  "generatedAt": "2026-09-13T07:51:36.772Z",
+  "sources": [
+    {
+      "id": "ebay",
+      "name": "eBay",
+      "enabled": true,
+      "type": "browse-api",
+      "env": [
+        "EBAY_CLIENT_ID",
+        "EBAY_CLIENT_SECRET"
+      ],
+      "note": "Official Browse API adapter. Free developer program; API access is subject to eBay limits and terms."
+    },
+    {
+      "id": "bestbuy",
+      "name": "Best Buy",
+      "enabled": true,
+      "type": "products-api",
+      "env": [
+        "BESTBUY_API_KEY"
+      ],
+      "note": "Official Products API adapter. Availability/terms can vary by program and region."
+    },
+    {
+      "id": "amazon",
+      "name": "Amazon",
+      "enabled": true,
+      "type": "creators-api",
+      "env": [
+        "AMAZON_ACCESS_KEY",
+        "AMAZON_SECRET_KEY"
+      ],
+      "note": "Official Creators API adapter placeholder; account/program eligibility is required."
+    },
+    {
+      "id": "etsy",
+      "name": "Etsy",
+      "enabled": false,
+      "type": "open-api-v3",
+      "env": [
+        "ETSY_API_KEY",
+        "ETSY_ACCESS_TOKEN"
+      ],
+      "note": "Enabled after app registration and required OAuth authorization."
+    }
+  ],
+  "count": 0,
+  "products": []
 }
