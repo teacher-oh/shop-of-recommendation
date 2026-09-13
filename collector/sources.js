@@ -1,0 +1,36 @@
+const sources = [
+  {
+    id: 'ebay',
+    name: 'eBay',
+    enabled: true,
+    type: 'browse-api',
+    env: ['EBAY_CLIENT_ID', 'EBAY_CLIENT_SECRET'],
+    note: 'Official Browse API adapter. Free developer program; API access is subject to eBay limits and terms.'
+  },
+  {
+    id: 'bestbuy',
+    name: 'Best Buy',
+    enabled: true,
+    type: 'products-api',
+    env: ['BESTBUY_API_KEY'],
+    note: 'Official Products API adapter. Availability/terms can vary by program and region.'
+  },
+  {
+    id: 'amazon',
+    name: 'Amazon',
+    enabled: true,
+    type: 'creators-api',
+    env: ['AMAZON_ACCESS_KEY', 'AMAZON_SECRET_KEY'],
+    note: 'Official Creators API adapter placeholder; account/program eligibility is required.'
+  },
+  {
+    id: 'etsy',
+    name: 'Etsy',
+    enabled: false,
+    type: 'open-api-v3',
+    env: ['ETSY_API_KEY', 'ETSY_ACCESS_TOKEN'],
+    note: 'Enabled after app registration and required OAuth authorization.'
+  }
+];
+
+module.exports = { sources };
