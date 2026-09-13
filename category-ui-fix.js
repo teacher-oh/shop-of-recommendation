@@ -13,11 +13,4 @@
     });
   });
   if(typeof renderCategories==='function') renderCategories();
-  // Load the deterministic 0-100 score layer after the catalog UI exists.
-  if(!window.SORScoreEngine){
-    const s=document.createElement('script');
-    s.src='./evaluation/runtime-scores.js';
-    s.defer=true;
-    document.head.appendChild(s);
-  }
 })();
