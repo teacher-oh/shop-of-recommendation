@@ -24,18 +24,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Refresh free catalog
+      - name: Refresh full free catalog
         run: node collector/refresh-dummyjson.js
-      - name: Collect optional live providers
-        env:
-          EBAY_CLIENT_ID: ${{ secrets.EBAY_CLIENT_ID }}
-          EBAY_CLIENT_SECRET: ${{ secrets.EBAY_CLIENT_SECRET }}
-          BESTBUY_API_KEY: ${{ secrets.BESTBUY_API_KEY }}
-          AMAZON_ACCESS_KEY: ${{ secrets.AMAZON_ACCESS_KEY }}
-          AMAZON_SECRET_KEY: ${{ secrets.AMAZON_SECRET_KEY }}
-          ETSY_API_KEY: ${{ secrets.ETSY_API_KEY }}
-          ETSY_ACCESS_TOKEN: ${{ secrets.ETSY_ACCESS_TOKEN }}
-        run: npm run collect || true
       - name: Commit catalog
         run: |
           git config user.name 'github-actions[bot]'
