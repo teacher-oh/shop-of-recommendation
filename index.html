@@ -30,7 +30,7 @@
       <div class="hero-card"><div class="floating-label">TODAY'S PICK</div><div class="hero-product-art">◉</div><div class="hero-product-info"><span class="country">🇯🇵 JAPAN · SONY</span><h3>WH-1000XM5</h3><div class="hero-rating">★★★★★ <b>4.8</b></div><p>“음질·노이즈 캔슬링·착용감의 균형이 뛰어난 무선 헤드폰.”</p></div></div>
     </section>
 
-    <section class="stats"><div><strong>12</strong><span>큐레이션 상품</span></div><div><strong>8</strong><span>국가</span></div><div><strong>4.5/5</strong><span>평균 추천점수</span></div><div><strong>비교 가능</strong><span>구매처 연결</span></div></section>
+    <section class="stats"><div><strong id="liveProductCount">12</strong><span>큐레이션 상품</span></div><div><strong>전 세계</strong><span>구매처 연동</span></div><div><strong id="liveStatus">데모</strong><span>데이터 상태</span></div><div><strong>비교 가능</strong><span>구매처 연결</span></div></section>
 
     <section class="section" id="categories"><div class="section-head"><div><span class="eyebrow">EXPLORE</span><h2>카테고리</h2></div></div><div class="category-grid">
       <button class="category active" data-category="all"><span>✦</span><b>전체</b><small>ALL PRODUCTS</small></button><button class="category" data-category="audio"><span>◉</span><b>오디오</b><small>AUDIO</small></button><button class="category" data-category="tech"><span>⌨</span><b>테크</b><small>TECH</small></button><button class="category" data-category="camera"><span>◎</span><b>카메라</b><small>CAMERA</small></button><button class="category" data-category="living"><span>◇</span><b>생활</b><small>LIVING</small></button><button class="category" data-category="fashion"><span>◈</span><b>패션</b><small>FASHION</small></button>
@@ -38,15 +38,16 @@
 
     <section class="section" id="discover"><div class="section-head results-head"><div><span class="eyebrow">CURATED FOR YOU</span><h2>추천 상품 <small id="resultCount"></small></h2></div><div class="sort-wrap"><label for="sortSelect">정렬</label><select id="sortSelect"><option value="recommend">추천순</option><option value="rating">평점순</option><option value="price-low">가격 낮은순</option><option value="price-high">가격 높은순</option></select></div></div>
       <div class="filter-row"><button class="filter active" data-filter="all">전체</button><button class="filter" data-filter="best">BEST</button><button class="filter" data-filter="value">가성비</button><button class="filter" data-filter="new">신상품</button></div>
-      <div class="demo-banner"><b>현재 데모 버전</b><span>상품·평점·기준가는 샘플 데이터이며, 구매 버튼은 각 브랜드/판매처로 연결됩니다. 실시간 가격·재고 API 연결을 위한 구조는 준비되어 있습니다.</span></div>
+      <div class="demo-banner" id="dataBanner"><b>실시간 데이터 준비 완료</b><span>Amazon·AliExpress·Coupang 등 공식/허가된 상품 데이터 소스를 서버에서 정규화해 이미지·가격·평점·구매 링크를 연결할 수 있습니다. API 키가 없으면 샘플 데이터로 안전하게 동작합니다.</span></div>
       <div id="productGrid" class="product-grid"></div><div id="emptyState" class="empty" hidden>조건에 맞는 상품이 없어요.<br><button id="resetBtn">필터 초기화</button></div>
     </section>
 
-    <section class="why" id="how"><div><span class="eyebrow">WHY US</span><h2>별점만 보여주는<br>쇼핑 사이트가 아닙니다.</h2></div><div class="why-grid"><article><span>01</span><h3>종합 추천점수</h3><p>품질, 가격, 디자인, 사용성을 따로 평가해 어떤 부분에서 좋은지 보여줍니다.</p></article><article><span>02</span><h3>구매처 비교</h3><p>공식 판매처와 글로벌 구매처를 한곳에서 확인하고 직접 이동할 수 있습니다.</p></article><article><span>03</span><h3>한눈에 보는 리뷰</h3><p>장점·아쉬운 점·추천 대상을 상품 상세 화면에서 빠르게 확인할 수 있습니다.</p></article></div></section>
+    <section class="why" id="how"><div><span class="eyebrow">WHY US</span><h2>별점만 보여주는<br>쇼핑 사이트가 아닙니다.</h2></div><div class="why-grid"><article><span>01</span><h3>종합 추천점수</h3><p>품질, 가격, 디자인, 사용성을 따로 평가해 어떤 부분에서 좋은지 보여줍니다.</p></article><article><span>02</span><h3>구매처 비교</h3><p>공식 판매처와 글로벌 구매처를 한곳에서 확인하고 직접 이동할 수 있습니다.</p></article><article><span>03</span><h3>리뷰 요약</h3><p>허용된 리뷰 데이터의 원문을 무단 복제하지 않고, 평점·장단점 신호를 짧은 자체 요약으로 보여줍니다.</p></article></div></section>
   </main>
 
   <div class="modal" id="productModal" aria-hidden="true"><div class="modal-backdrop" data-close></div><article class="modal-card"><button class="close" data-close aria-label="닫기">×</button><div id="modalContent"></div></article></div>
   <footer><div class="brand footer-brand"><span class="brand-mark">S</span><span>SHOP OF RECOMMENDATION</span></div><p>좋은 상품을 찾는 시간을 줄이고, 더 나은 선택을 돕습니다.</p><small>© 2026 Shop of Recommendation</small></footer>
   <script src="app.js"></script>
+  <script src="live.js"></script>
 </body>
 </html>
