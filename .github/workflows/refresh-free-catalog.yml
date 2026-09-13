@@ -1,0 +1,78 @@
+name: Refresh free product catalog
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '30 */6 * * *'
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Fetch DummyJSON catalog
+        run: |
+          mkdir -p data
+          curl -fsSL 'https://dummyjson.com/products?limit=0' -o /tmp/products.json
+          node <<'NODE'
+          const fs = require('fs');
+          const raw = JSON.parse(fs.readFileSync('/tmp/products.json', 'utf8'));
+          const categoryMap = {
+            beauty: 'beauty', fragrances: 'beauty', 'skin-care': 'beauty',
+            laptops: 'computers', smartphones: 'mobile', tablets: 'mobile', 'mobile-accessories': 'mobile',
+            'mens-shirts': 'fashion', tops: 'fashion', 'womens-dresses': 'fashion',
+            'mens-shoes': 'shoes', 'womens-shoes': 'shoes',
+            'mens-watches': 'fashion', 'womens-watches': 'fashion', 'womens-jewellery': 'fashion',
+            'womens-bags': 'bags', sunglasses: 'fashion',
+            furniture: 'furniture', 'home-decoration': 'home-appliances', 'kitchen-accessories': 'kitchen',
+            groceries: 'food', 'sports-accessories': 'sports', vehicle: 'automotive', motorcycle: 'automotive'
+          };
+          const products = (raw.products || []).map((p) => ({
+            id: `dummyjson-${p.id}`,
+            source: 'dummyjson',
+            sourceId: String(p.id),
+            brand: p.brand || 'Unknown',
+            name: p.title,
+            category: categoryMap[p.category] || p.category || 'electronics',
+            sourceCategory: p.category,
+            country: 'US',
+            price: Number(p.price),
+            currency: 'USD',
+            image: p.thumbnail || (p.images && p.images[0]) || null,
+            rating: Number(p.rating || 0),
+            reviewCount: Array.isArray(p.reviews) ? p.reviews.length : 0,
+            url: `https://dummyjson.com/products/${p.id}`,
+            seller: 'DummyJSON demo catalog',
+            description: p.description || '',
+            discountPercentage: Number(p.discountPercentage || 0),
+            stock: Number(p.stock || 0),
+            updatedAt: p.meta?.updatedAt || new Date().toISOString()
+          }));
+          const output = {
+            generatedAt: new Date().toISOString(),
+            source: 'DummyJSON',
+            count: products.length,
+            products
+          };
+          fs.writeFileSync('data/products.json', JSON.stringify(output, null, 2));
+          fs.writeFileSync('data/catalog.db.json', JSON.stringify({
+            generatedAt: output.generatedAt,
+            products,
+            sources: [{ id: 'dummyjson', name: 'DummyJSON', type: 'free-demo-api' }]
+          }, null, 2));
+          console.log(`Wrote ${products.length} products`);
+          NODE
+
+      - name: Commit catalog
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/products.json data/catalog.db.json
+          git diff --cached --quiet || git commit -m 'chore: refresh free product catalog'
+          git push
