@@ -1,7 +1,7 @@
 {
   "apiVersion": "mock-v1",
   "mock": true,
-  "generatedAt": "2026-09-14T05:56:03.564Z",
+  "generatedAt": "2026-09-14T06:16:32.916Z",
   "endpoints": {
     "products": "./products.json",
     "reviews": "./reviews.json",
