@@ -32,8 +32,8 @@ jobs:
 
           function findAsin(value) {
             const text = typeof value === 'string' ? value : JSON.stringify(value || '');
-            const m = text.match(/(?:dp\\/|gp\\/product\\/|asin\\/|ASIN[:=]\\s*)([A-Z0-9]{10})/i) || text.match(/\\b[A-Z0-9]{10}\\b/);
-            return m ? (m[1] || m[0]).toUpperCase() : null;
+            const m = text.match(/\b[A-Z0-9]{10}\b/);
+            return m ? m[0].toUpperCase() : null;
           }
 
           async function call(host, endpoint, params) {
@@ -111,9 +111,11 @@ jobs:
         if: always()
         run: |
           mkdir -p data
-          if [ -f axesso-smoke-result.json ]; then cp axesso-smoke-result.json data/axesso-smoke-result.json; fi
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add data/axesso-smoke-result.json
-          git diff --cached --quiet || git commit -m 'test: verify Axesso Amazon access'
-          git push
+          if [ -f axesso-smoke-result.json ]; then
+            cp axesso-smoke-result.json data/axesso-smoke-result.json
+            git add data/axesso-smoke-result.json
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git diff --cached --quiet || git commit -m 'test: verify Axesso Amazon access'
+            git push
+          fi
