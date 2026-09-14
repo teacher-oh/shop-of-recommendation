@@ -1,4 +1,4 @@
-/* Keep detailed taxonomy, make the UI readable, and repair the loading/score pipeline. */
+/* Keep detailed taxonomy, make the UI readable, and repair the loading/category/score pipeline. */
 (function(){
   if(typeof CATEGORY_TREE==='undefined') return;
 
@@ -14,8 +14,6 @@
 
   if(typeof renderCategories==='function') renderCategories();
 
-  // The catalog renderer originally requested every product image eagerly.
-  // Keep the catalog usable first; images load as cards enter the viewport.
   if(typeof window.productCard==='function'){
     const originalProductCard=window.productCard;
     window.productCard=function(p){
@@ -23,15 +21,14 @@
     };
   }
 
-  // High-precision category correction: title/product signals override bad source labels.
+  // v2 is deliberately loaded after app.js so it can audit the actual loaded catalog.
   if(!document.querySelector('script[data-sor-category-audit]')){
     const s=document.createElement('script');
-    s.src='category-audit.js';
+    s.src='category-audit-v2.js';
     s.dataset.sorCategoryAudit='1';
     document.body.appendChild(s);
   }
 
-  // score.js is the calculation engine; score-ui.js only paints its result.
   if(!document.querySelector('script[data-sor-score-ui]')){
     const s=document.createElement('script');
     s.src='score-ui.js';
@@ -39,7 +36,6 @@
     document.body.appendChild(s);
   }
 
-  // Add the browser-only API credential/settings panel.
   if(!document.querySelector('script[data-sor-api-settings]')){
     const s=document.createElement('script');
     s.src='api-settings.js';
