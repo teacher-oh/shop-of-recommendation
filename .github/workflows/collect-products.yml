@@ -1,8 +1,6 @@
 name: Refresh product catalog
 
-# Two Amazon sources are collected independently and merged into the catalog:
-# 1) Axesso Amazon Data Service
-# 2) RapidAPI Real-Time Amazon Data
+# Amazon data is collected through Axesso Amazon Data Service.
 # Secrets are passed only through GitHub Actions.
 on:
   workflow_dispatch:
@@ -20,7 +18,7 @@ on:
         required: false
         default: '2'
       amazon_max_products:
-        description: 'Maximum unique Amazon products to collect per source'
+        description: 'Maximum unique Amazon products to collect'
         required: false
         default: '100'
       amazon_details:
@@ -31,32 +29,11 @@ on:
         description: 'Axesso RapidAPI host'
         required: false
         default: 'axesso-amazon-data-service1.p.rapidapi.com'
-      realtime_pages:
-        description: 'Real-Time Amazon Data search pages per query'
-        required: false
-        default: '2'
-      realtime_max_products:
-        description: 'Maximum Real-Time Amazon Data products'
-        required: false
-        default: '100'
-      realtime_details:
-        description: 'Maximum Real-Time Amazon Data detail enrichments'
-        required: false
-        default: '30'
-      realtime_reviews:
-        description: 'Maximum Real-Time Amazon Data review samples'
-        required: false
-        default: '20'
-      realtime_offers:
-        description: 'Maximum Real-Time Amazon Data offer enrichments'
-        required: false
-        default: '20'
   push:
     paths:
       - 'collector/refresh-dummyjson.js'
       - 'collector/mock-api.js'
       - 'collector/axesso-amazon.js'
-      - 'collector/rapidapi-amazon.js'
       - '.github/workflows/collect-products.yml'
   schedule:
     - cron: '17 18 * * 1'
@@ -94,23 +71,6 @@ jobs:
           AXESSO_BETA_MAX_PRODUCTS: ${{ inputs.amazon_max_products || '100' }}
           AXESSO_BETA_DETAILS: ${{ inputs.amazon_details || '50' }}
         run: node collector/axesso-amazon.js
-
-      - name: Refresh Amazon catalog with Real-Time Amazon Data
-        continue-on-error: true
-        env:
-          AMAZON_RAPIDAPI_KEY: ${{ secrets.AMAZON_RAPIDAPI_KEY }}
-          AMAZON_API_HOST: ${{ secrets.AMAZON_API_HOST || 'real-time-amazon-data.p.rapidapi.com' }}
-          AMAZON_BETA_QUERIES: ${{ inputs.amazon_queries || 'wireless headphones,wireless earbuds,laptop,smartphone,monitor,keyboard,mouse,air fryer,vacuum cleaner,running shoes,backpack,coffee maker' }}
-          AMAZON_COUNTRY: ${{ inputs.amazon_country || 'US' }}
-          AMAZON_BETA_PAGES: ${{ inputs.realtime_pages || '2' }}
-          AMAZON_BETA_MAX_PRODUCTS: ${{ inputs.realtime_max_products || '100' }}
-          AMAZON_BETA_DETAILS: ${{ inputs.realtime_details || '30' }}
-          AMAZON_BETA_REVIEWS: ${{ inputs.realtime_reviews || '20' }}
-          AMAZON_BETA_OFFERS: ${{ inputs.realtime_offers || '20' }}
-          AMAZON_BETA_REVIEW_PAGES: '1'
-          AMAZON_BETA_OFFER_PAGE_LIMIT: '50'
-          AMAZON_BETA_DELAY_MS: '500'
-        run: node collector/rapidapi-amazon.js
 
       - name: Generate mock supplier API
         run: node collector/mock-api.js
