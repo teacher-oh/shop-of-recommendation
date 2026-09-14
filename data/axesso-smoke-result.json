@@ -1,0 +1,39 @@
+{
+  "testedAt": "2026-09-14T16:46:59.760Z",
+  "query": "wireless headphones",
+  "hosts": [
+    {
+      "host": "axesso-amazon-data-service1.p.rapidapi.com",
+      "search": {
+        "status": 404,
+        "ok": false,
+        "resultCount": 0
+      },
+      "detail": null
+    },
+    {
+      "host": "axesso-axesso-amazon-data-service-v1.p.rapidapi.com",
+      "search": {
+        "status": 200,
+        "ok": true,
+        "resultCount": 16,
+        "asin": "B0HDP66L5P"
+      },
+      "detail": {
+        "status": 200,
+        "ok": true,
+        "fields": {
+          "asin": "B0HDP66L5P",
+          "title": "Bluetooth Headphones, Hybrid Active Noise Cancelling Over Ear Headphones",
+          "price": 19.99,
+          "rating": "4.9 out of 5 stars",
+          "reviewCount": 24,
+          "prime": false,
+          "seller": "MMWOWARTS-US-LDJY",
+          "fulfilledBy": "Amazon",
+          "availability": "In Stock"
+        }
+      }
+    }
+  ]
+}
