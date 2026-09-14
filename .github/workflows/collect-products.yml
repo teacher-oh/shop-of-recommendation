@@ -1,7 +1,8 @@
 name: Refresh product catalog
 
 # Beta Amazon integration: Axesso search + product details.
-# The Axesso key stays in GitHub Actions secret AXESSO_RAPIDAPI_KEY.
+# The existing GitHub Actions secret AMAZON_BETA_RAPIDAPI_KEY is mapped
+# to the collector's AXESSO_RAPIDAPI_KEY environment variable.
 on:
   workflow_dispatch:
     inputs:
@@ -62,7 +63,7 @@ jobs:
 
       - name: Refresh Amazon beta catalog with Axesso
         env:
-          AXESSO_RAPIDAPI_KEY: ${{ secrets.AXESSO_RAPIDAPI_KEY }}
+          AXESSO_RAPIDAPI_KEY: ${{ secrets.AMAZON_BETA_RAPIDAPI_KEY }}
           AXESSO_API_HOST: ${{ inputs.amazon_host || 'axesso-amazon-data-service1.p.rapidapi.com' }}
           AXESSO_BETA_QUERIES: ${{ inputs.amazon_queries || 'wireless headphones,wireless earbuds,laptop,smartphone,monitor,keyboard,mouse,air fryer,vacuum cleaner,running shoes,backpack,coffee maker' }}
           AXESSO_COUNTRY: ${{ inputs.amazon_country || 'US' }}
