@@ -1,6 +1,6 @@
 // RapidAPI Real-Time Amazon Data collector.
 // Secrets are supplied by GitHub Actions; never hard-code API keys here.
-// The current provider exposes Product Search at /search and returns ASIN, title,
+// The provider exposes Product Search at /search and returns ASIN, title,
 // price, rating, review count, image and product URL fields.
 
 const fs = require('node:fs');
@@ -104,11 +104,15 @@ async function main() {
   const map = new Map(list.map(p => [p.id, p]));
   for (const product of incoming) map.set(product.id, product);
 
-  const output = {
-    updatedAt: new Date().toISOString(),
-    count: map.size,
-    products: [...map.values()]
-  };
+  const output = Array.isArray(existing)
+    ? [...map.values()]
+    : {
+        ...existing,
+        generatedAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        count: map.size,
+        products: [...map.values()]
+      };
   fs.writeFileSync(file, JSON.stringify(output, null, 2) + '\n');
   console.log(`RapidAPI catalog refresh: ${incoming.length} Amazon products merged; total ${map.size}.`);
 }
