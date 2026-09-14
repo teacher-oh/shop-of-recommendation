@@ -1,7 +1,9 @@
 {
-  "generatedAt": "2026-09-14T12:35:39.260Z",
-  "startedAt": "2026-09-14T12:32:56.233Z",
+  "provider": "axesso-amazon-data-service",
+  "generatedAt": "2026-09-14T15:48:17.487Z",
+  "startedAt": "2026-09-14T15:47:38.297Z",
   "marketplace": "US",
+  "domain": "com",
   "queries": [
     "wireless headphones",
     "wireless earbuds",
@@ -17,308 +19,183 @@
     "coffee maker"
   ],
   "config": {
-    "pages": 4,
-    "maxProducts": 1000,
-    "details": 300,
-    "reviews": 100,
-    "reviewPages": 2,
-    "offers": 100,
-    "offerPageLimit": 50
+    "pages": 2,
+    "maxProducts": 100,
+    "detailLimit": 50,
+    "delayMs": 750
   },
   "stats": {
     "searchCalls": 0,
+    "detailCalls": 0,
     "productsFound": 0,
-    "detailsCalls": 0,
-    "reviewCalls": 0,
-    "offerCalls": 0,
     "errors": [
       {
         "endpoint": "search",
         "query": "wireless headphones",
         "page": 1,
-        "message": "RapidAPI 429 Too Many Requests"
+        "status": 404,
+        "message": "Axesso 404 Not Found"
       },
       {
         "endpoint": "search",
         "query": "wireless headphones",
         "page": 2,
-        "message": "RapidAPI 429 Too Many Requests"
-      },
-      {
-        "endpoint": "search",
-        "query": "wireless headphones",
-        "page": 3,
-        "message": "RapidAPI 429 Too Many Requests"
-      },
-      {
-        "endpoint": "search",
-        "query": "wireless headphones",
-        "page": 4,
-        "message": "RapidAPI 429 Too Many Requests"
+        "status": 429,
+        "message": "Axesso 429 Too Many Requests"
       },
       {
         "endpoint": "search",
         "query": "wireless earbuds",
         "page": 1,
-        "message": "RapidAPI 429 Too Many Requests"
+        "status": 404,
+        "message": "Axesso 404 Not Found"
       },
       {
         "endpoint": "search",
         "query": "wireless earbuds",
         "page": 2,
-        "message": "RapidAPI 429 Too Many Requests"
-      },
-      {
-        "endpoint": "search",
-        "query": "wireless earbuds",
-        "page": 3,
-        "message": "RapidAPI 429 Too Many Requests"
-      },
-      {
-        "endpoint": "search",
-        "query": "wireless earbuds",
-        "page": 4,
-        "message": "RapidAPI 429 Too Many Requests"
+        "status": 429,
+        "message": "Axesso 429 Too Many Requests"
       },
       {
         "endpoint": "search",
         "query": "laptop",
         "page": 1,
-        "message": "RapidAPI 429 Too Many Requests"
+        "status": 404,
+        "message": "Axesso 404 Not Found"
       },
       {
         "endpoint": "search",
         "query": "laptop",
         "page": 2,
-        "message": "RapidAPI 429 Too Many Requests"
-      },
-      {
-        "endpoint": "search",
-        "query": "laptop",
-        "page": 3,
-        "message": "RapidAPI 429 Too Many Requests"
-      },
-      {
-        "endpoint": "search",
-        "query": "laptop",
-        "page": 4,
-        "message": "RapidAPI 429 Too Many Requests"
+        "status": 429,
+        "message": "Axesso 429 Too Many Requests"
       },
       {
         "endpoint": "search",
         "query": "smartphone",
         "page": 1,
-        "message": "RapidAPI 429 Too Many Requests"
+        "status": 404,
+        "message": "Axesso 404 Not Found"
       },
       {
         "endpoint": "search",
         "query": "smartphone",
         "page": 2,
-        "message": "RapidAPI 429 Too Many Requests"
-      },
-      {
-        "endpoint": "search",
-        "query": "smartphone",
-        "page": 3,
-        "message": "RapidAPI 429 Too Many Requests"
-      },
-      {
-        "endpoint": "search",
-        "query": "smartphone",
-        "page": 4,
-        "message": "RapidAPI 429 Too Many Requests"
+        "status": 429,
+        "message": "Axesso 429 Too Many Requests"
       },
       {
         "endpoint": "search",
         "query": "monitor",
         "page": 1,
-        "message": "RapidAPI 429 Too Many Requests"
+        "status": 404,
+        "message": "Axesso 404 Not Found"
       },
       {
         "endpoint": "search",
         "query": "monitor",
         "page": 2,
-        "message": "RapidAPI 429 Too Many Requests"
-      },
-      {
-        "endpoint": "search",
-        "query": "monitor",
-        "page": 3,
-        "message": "RapidAPI 429 Too Many Requests"
-      },
-      {
-        "endpoint": "search",
-        "query": "monitor",
-        "page": 4,
-        "message": "RapidAPI 429 Too Many Requests"
+        "status": 429,
+        "message": "Axesso 429 Too Many Requests"
       },
       {
         "endpoint": "search",
         "query": "keyboard",
         "page": 1,
-        "message": "RapidAPI 429 Too Many Requests"
+        "status": 404,
+        "message": "Axesso 404 Not Found"
       },
       {
         "endpoint": "search",
         "query": "keyboard",
         "page": 2,
-        "message": "RapidAPI 429 Too Many Requests"
-      },
-      {
-        "endpoint": "search",
-        "query": "keyboard",
-        "page": 3,
-        "message": "RapidAPI 429 Too Many Requests"
-      },
-      {
-        "endpoint": "search",
-        "query": "keyboard",
-        "page": 4,
-        "message": "RapidAPI 429 Too Many Requests"
+        "status": 429,
+        "message": "Axesso 429 Too Many Requests"
       },
       {
         "endpoint": "search",
         "query": "mouse",
         "page": 1,
-        "message": "RapidAPI 429 Too Many Requests"
+        "status": 404,
+        "message": "Axesso 404 Not Found"
       },
       {
         "endpoint": "search",
         "query": "mouse",
         "page": 2,
-        "message": "RapidAPI 429 Too Many Requests"
-      },
-      {
-        "endpoint": "search",
-        "query": "mouse",
-        "page": 3,
-        "message": "RapidAPI 429 Too Many Requests"
-      },
-      {
-        "endpoint": "search",
-        "query": "mouse",
-        "page": 4,
-        "message": "RapidAPI 429 Too Many Requests"
+        "status": 429,
+        "message": "Axesso 429 Too Many Requests"
       },
       {
         "endpoint": "search",
         "query": "air fryer",
         "page": 1,
-        "message": "RapidAPI 429 Too Many Requests"
+        "status": 404,
+        "message": "Axesso 404 Not Found"
       },
       {
         "endpoint": "search",
         "query": "air fryer",
         "page": 2,
-        "message": "RapidAPI 429 Too Many Requests"
-      },
-      {
-        "endpoint": "search",
-        "query": "air fryer",
-        "page": 3,
-        "message": "RapidAPI 429 Too Many Requests"
-      },
-      {
-        "endpoint": "search",
-        "query": "air fryer",
-        "page": 4,
-        "message": "RapidAPI 429 Too Many Requests"
+        "status": 429,
+        "message": "Axesso 429 Too Many Requests"
       },
       {
         "endpoint": "search",
         "query": "vacuum cleaner",
         "page": 1,
-        "message": "RapidAPI 429 Too Many Requests"
+        "status": 404,
+        "message": "Axesso 404 Not Found"
       },
       {
         "endpoint": "search",
         "query": "vacuum cleaner",
         "page": 2,
-        "message": "RapidAPI 429 Too Many Requests"
-      },
-      {
-        "endpoint": "search",
-        "query": "vacuum cleaner",
-        "page": 3,
-        "message": "RapidAPI 429 Too Many Requests"
-      },
-      {
-        "endpoint": "search",
-        "query": "vacuum cleaner",
-        "page": 4,
-        "message": "RapidAPI 429 Too Many Requests"
+        "status": 429,
+        "message": "Axesso 429 Too Many Requests"
       },
       {
         "endpoint": "search",
         "query": "running shoes",
         "page": 1,
-        "message": "RapidAPI 429 Too Many Requests"
+        "status": 404,
+        "message": "Axesso 404 Not Found"
       },
       {
         "endpoint": "search",
         "query": "running shoes",
         "page": 2,
-        "message": "RapidAPI 429 Too Many Requests"
-      },
-      {
-        "endpoint": "search",
-        "query": "running shoes",
-        "page": 3,
-        "message": "RapidAPI 429 Too Many Requests"
-      },
-      {
-        "endpoint": "search",
-        "query": "running shoes",
-        "page": 4,
-        "message": "RapidAPI 429 Too Many Requests"
+        "status": 429,
+        "message": "Axesso 429 Too Many Requests"
       },
       {
         "endpoint": "search",
         "query": "backpack",
         "page": 1,
-        "message": "RapidAPI 429 Too Many Requests"
+        "status": 404,
+        "message": "Axesso 404 Not Found"
       },
       {
         "endpoint": "search",
         "query": "backpack",
         "page": 2,
-        "message": "RapidAPI 429 Too Many Requests"
-      },
-      {
-        "endpoint": "search",
-        "query": "backpack",
-        "page": 3,
-        "message": "RapidAPI 429 Too Many Requests"
-      },
-      {
-        "endpoint": "search",
-        "query": "backpack",
-        "page": 4,
-        "message": "RapidAPI 429 Too Many Requests"
+        "status": 429,
+        "message": "Axesso 429 Too Many Requests"
       },
       {
         "endpoint": "search",
         "query": "coffee maker",
         "page": 1,
-        "message": "RapidAPI 429 Too Many Requests"
+        "status": 404,
+        "message": "Axesso 404 Not Found"
       },
       {
         "endpoint": "search",
         "query": "coffee maker",
         "page": 2,
-        "message": "RapidAPI 429 Too Many Requests"
-      },
-      {
-        "endpoint": "search",
-        "query": "coffee maker",
-        "page": 3,
-        "message": "RapidAPI 429 Too Many Requests"
-      },
-      {
-        "endpoint": "search",
-        "query": "coffee maker",
-        "page": 4,
-        "message": "RapidAPI 429 Too Many Requests"
+        "status": 429,
+        "message": "Axesso 429 Too Many Requests"
       }
     ]
   },
