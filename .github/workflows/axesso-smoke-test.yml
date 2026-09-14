@@ -1,0 +1,96 @@
+name: Axesso smoke test
+
+on:
+  push:
+    paths:
+      - '.github/workflows/axesso-smoke-test.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Test Axesso RapidAPI hosts
+        env:
+          AXESSO_RAPIDAPI_KEY: ${{ secrets.AXESSO_RAPIDAPI_KEY }}
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const hosts = [
+            'axesso-amazon-data-service1.p.rapidapi.com',
+            'axesso-axesso-amazon-data-service-v1.p.rapidapi.com'
+          ];
+          const out = { testedAt: new Date().toISOString(), query: 'wireless headphones', hosts: [] };
+
+          async function call(host, endpoint, params) {
+            const url = new URL(`https://${host}${endpoint}`);
+            for (const [k,v] of Object.entries(params)) url.searchParams.set(k, String(v));
+            const r = await fetch(url, { headers: {
+              accept: 'application/json',
+              'x-rapidapi-key': process.env.AXESSO_RAPIDAPI_KEY || '',
+              'x-rapidapi-host': host
+            }});
+            const text = await r.text();
+            let body; try { body = JSON.parse(text); } catch { body = { raw: text.slice(0, 300) }; }
+            return { status: r.status, ok: r.ok, body };
+          }
+
+          for (const host of hosts) {
+            const row = { host, search: null, detail: null };
+            try {
+              const search = await call(host, '/amz/amazon-search-by-keyword', {
+                keyword: 'wireless headphones', domainCode: 'com', sortBy: 'relevanceblender', numberOfProducts: 3
+              });
+              row.search = { status: search.status, ok: search.ok };
+              if (search.ok) {
+                const products = search.body?.foundProducts || search.body?.data?.foundProducts || [];
+                row.search.resultCount = Array.isArray(products) ? products.length : 0;
+                const first = Array.isArray(products) ? products[0] : null;
+                const m = String(first || '').match(/(?:dp\/|gp\/product\/|asin\/|ASIN[:=]\s*)([A-Z0-9]{10})/i) || String(first || '').match(/\b[A-Z0-9]{10}\b/);
+                const asin = m ? (m[1] || m[0]).toUpperCase() : null;
+                row.search.asin = asin;
+                if (asin) {
+                  const detail = await call(host, '/amz/amazon-lookup-product', { url: `https://www.amazon.com/dp/${asin}` });
+                  row.detail = { status: detail.status, ok: detail.ok };
+                  if (detail.ok) {
+                    const d = detail.body?.data || detail.body || {};
+                    row.detail.fields = {
+                      asin: d.asin || asin,
+                      title: d.productTitle || null,
+                      price: d.price ?? null,
+                      rating: d.productRating || null,
+                      reviewCount: d.countReview ?? null,
+                      prime: d.prime ?? null,
+                      seller: d.soldBy || null,
+                      fulfilledBy: d.fulfilledBy || null,
+                      availability: d.warehouseAvailability || null
+                    };
+                  }
+                }
+              }
+            } catch (e) {
+              row.error = String(e.message || e);
+            }
+            out.hosts.push(row);
+          }
+
+          fs.writeFileSync('axesso-smoke-result.json', JSON.stringify(out, null, 2) + '\n');
+          console.log(JSON.stringify(out, null, 2));
+          NODE
+
+      - name: Save smoke result
+        run: |
+          mkdir -p data
+          cp axesso-smoke-result.json data/axesso-smoke-result.json
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/axesso-smoke-result.json
+          git diff --cached --quiet || git commit -m 'test: verify Axesso Amazon access'
+          git push
