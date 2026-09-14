@@ -19,15 +19,22 @@
     ${p.description ? `<div class="reason"><b>상품 요약</b><br>${esc(p.description).slice(0,180)}</div>` : ''}</div>
   </a></article>`;
 
-  fetch('/api/products', {headers:{Accept:'application/json'}})
-    .then(r => r.ok ? r.json() : Promise.reject(new Error('API unavailable')))
-    .then(data => {
-      if (!data.live || !Array.isArray(data.products) || !data.products.length) return;
-      grid.innerHTML = data.products.map(card).join('');
-      count.textContent = data.count;
-      status.textContent = 'LIVE';
-      if (banner) banner.innerHTML = '<b>실시간 상품 데이터</b><span>연동된 판매처의 허용된 상품 데이터에서 이미지·가격·평점·구매 링크를 가져왔습니다. 가격과 재고는 판매처에서 최종 확인하세요.</span>';
-    })
+  const apply = data => {
+    const products = Array.isArray(data) ? data : data?.products;
+    if (!Array.isArray(products) || !products.length) throw new Error('No products');
+    grid.innerHTML = products.map(card).join('');
+    if (count) count.textContent = products.length;
+    if (status) status.textContent = 'LIVE';
+    if (banner) banner.innerHTML = '<b>실시간 상품 데이터</b><span>GitHub Actions가 수집·갱신한 상품 데이터에서 이미지·가격·평점·구매 링크를 표시합니다. 가격과 재고는 판매처에서 최종 확인하세요.</span>';
+  };
+
+  // GitHub Pages is static, so the committed catalog is the primary source.
+  fetch('data/products.json', {headers:{Accept:'application/json'}, cache:'no-store'})
+    .then(r => r.ok ? r.json() : Promise.reject(new Error('catalog unavailable')))
+    .then(apply)
+    .catch(() => fetch('/api/products', {headers:{Accept:'application/json'}}))
+    .then(r => r ? (r.ok ? r.json() : Promise.reject(new Error('API unavailable'))) : Promise.reject(new Error('API unavailable')))
+    .then(apply)
     .catch(() => {
       if (status) status.textContent = '데모';
     });
