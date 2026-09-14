@@ -1,5 +1,7 @@
 name: Refresh product catalog
 
+# Amazon Product Search is connected through the GitHub Actions secret
+# AMAZON_RAPIDAPI_KEY. The collector runs automatically on this workflow.
 on:
   workflow_dispatch:
     inputs:
@@ -50,7 +52,7 @@ jobs:
           KAKAO_REST_API_KEY: ${{ secrets.KAKAO_REST_API_KEY }}
         run: node collector/refresh-dummyjson.js
 
-      - name: Refresh catalog from RapidAPI Amazon
+      - name: Refresh catalog from RapidAPI Amazon Product Search
         env:
           AMAZON_RAPIDAPI_KEY: ${{ secrets.AMAZON_RAPIDAPI_KEY }}
           AMAZON_API_HOST: ${{ inputs.amazon_host || 'real-time-amazon-data.p.rapidapi.com' }}
