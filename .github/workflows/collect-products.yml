@@ -16,27 +16,27 @@ on:
       amazon_pages:
         description: 'Search pages per query'
         required: false
-        default: '2'
+        default: '4'
       amazon_max_products:
         description: 'Maximum unique Amazon products to import'
         required: false
-        default: '200'
+        default: '1000'
       amazon_details:
         description: 'Products receiving detailed product data'
         required: false
-        default: '60'
+        default: '300'
       amazon_reviews:
         description: 'Products receiving review samples'
         required: false
-        default: '20'
+        default: '100'
       amazon_review_pages:
         description: 'Review pages per sampled product'
         required: false
-        default: '1'
+        default: '2'
       amazon_offers:
         description: 'Products receiving seller offer data'
         required: false
-        default: '20'
+        default: '100'
       amazon_offer_page_limit:
         description: 'Maximum offers returned per offer request'
         required: false
@@ -61,7 +61,7 @@ jobs:
   collect:
     if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -82,12 +82,12 @@ jobs:
           AMAZON_API_HOST: ${{ inputs.amazon_host || 'real-time-amazon-data.p.rapidapi.com' }}
           AMAZON_BETA_QUERIES: ${{ inputs.amazon_queries || 'wireless headphones,wireless earbuds,laptop,smartphone,monitor,keyboard,mouse,air fryer,vacuum cleaner,running shoes,backpack,coffee maker' }}
           AMAZON_COUNTRY: ${{ inputs.amazon_country || 'US' }}
-          AMAZON_BETA_PAGES: ${{ inputs.amazon_pages || '2' }}
-          AMAZON_BETA_MAX_PRODUCTS: ${{ inputs.amazon_max_products || '200' }}
-          AMAZON_BETA_DETAILS: ${{ inputs.amazon_details || '60' }}
-          AMAZON_BETA_REVIEWS: ${{ inputs.amazon_reviews || '20' }}
-          AMAZON_BETA_REVIEW_PAGES: ${{ inputs.amazon_review_pages || '1' }}
-          AMAZON_BETA_OFFERS: ${{ inputs.amazon_offers || '20' }}
+          AMAZON_BETA_PAGES: ${{ inputs.amazon_pages || '4' }}
+          AMAZON_BETA_MAX_PRODUCTS: ${{ inputs.amazon_max_products || '1000' }}
+          AMAZON_BETA_DETAILS: ${{ inputs.amazon_details || '300' }}
+          AMAZON_BETA_REVIEWS: ${{ inputs.amazon_reviews || '100' }}
+          AMAZON_BETA_REVIEW_PAGES: ${{ inputs.amazon_review_pages || '2' }}
+          AMAZON_BETA_OFFERS: ${{ inputs.amazon_offers || '100' }}
           AMAZON_BETA_OFFER_PAGE_LIMIT: ${{ inputs.amazon_offer_page_limit || '50' }}
         run: node collector/rapidapi-amazon.js
 
