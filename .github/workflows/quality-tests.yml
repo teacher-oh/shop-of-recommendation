@@ -1,0 +1,76 @@
+name: Quality tests
+
+on:
+  push:
+    paths:
+      - 'collector/axesso-amazon.js'
+      - 'evaluation/**'
+      - '.github/workflows/quality-tests.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Syntax checks
+        run: |
+          node --check collector/axesso-amazon.js
+          node --check evaluation/validate.js
+          node --check evaluation/score.js
+
+      - name: Deterministic evaluator tests
+        run: node evaluation/validate.js
+
+      - name: Validate catalog JSON
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          for (const file of ['data/products.json', 'data/amazon-beta.json']) {
+            const data = JSON.parse(fs.readFileSync(file, 'utf8'));
+            if (file.endsWith('products.json')) {
+              const list = Array.isArray(data) ? data : data.products;
+              if (!Array.isArray(list)) throw new Error(`${file}: products array missing`);
+            }
+            console.log(`PASS  ${file}`);
+          }
+          NODE
+
+      - name: Live Axesso collector smoke test
+        env:
+          AXESSO_RAPIDAPI_KEY: ${{ secrets.AXESSO_RAPIDAPI_KEY }}
+          AXESSO_API_HOST: axesso-axesso-amazon-data-service-v1.p.rapidapi.com
+          AXESSO_COUNTRY: US
+          AXESSO_DOMAIN: com
+          AXESSO_BETA_QUERIES: wireless headphones
+          AXESSO_BETA_PAGES: '1'
+          AXESSO_BETA_MAX_PRODUCTS: '3'
+          AXESSO_BETA_DETAILS: '2'
+          AXESSO_BETA_DELAY_MS: '1500'
+        run: |
+          test -n "$AXESSO_RAPIDAPI_KEY"
+          node collector/axesso-amazon.js
+          node - <<'NODE'
+          const fs = require('fs');
+          const report = JSON.parse(fs.readFileSync('data/amazon-beta.json', 'utf8'));
+          const products = Array.isArray(report.products) ? report.products : [];
+          if (!products.length) throw new Error('Axesso collector returned zero products');
+          for (const p of products) {
+            if (!/^([A-Z0-9]{10})$/.test(p.asin || '')) throw new Error(`Invalid ASIN: ${p.asin}`);
+            if (p.rating != null && (!Number.isFinite(p.rating) || p.rating < 0 || p.rating > 5)) throw new Error(`Invalid rating: ${p.rating}`);
+            if (p.reviewCount != null && (!Number.isFinite(p.reviewCount) || p.reviewCount < 0)) throw new Error(`Invalid review count: ${p.reviewCount}`);
+          }
+          console.log(`PASS  live Axesso collector: ${products.length} products`);
+          console.log(`PASS  first product: ${products[0].asin} / rating=${products[0].rating} / reviews=${products[0].reviewCount}`);
+          NODE
