@@ -1,13 +1,12 @@
 name: Refresh product catalog
 
-# Beta Amazon integration: Axesso search + product details.
-# The existing GitHub Actions secret AMAZON_BETA_RAPIDAPI_KEY is mapped
-# to the collector's AXESSO_RAPIDAPI_KEY environment variable.
+# Axesso Amazon Data Service integration.
+# The GitHub Actions secret AXESSO_RAPIDAPI_KEY is passed to the collector.
 on:
   workflow_dispatch:
     inputs:
       amazon_queries:
-        description: 'Comma-separated Amazon beta search queries'
+        description: 'Comma-separated Amazon search queries'
         required: false
         default: 'wireless headphones,wireless earbuds,laptop,smartphone,monitor,keyboard,mouse,air fryer,vacuum cleaner,running shoes,backpack,coffee maker'
       amazon_country:
@@ -61,9 +60,9 @@ jobs:
           KAKAO_REST_API_KEY: ${{ secrets.KAKAO_REST_API_KEY }}
         run: node collector/refresh-dummyjson.js
 
-      - name: Refresh Amazon beta catalog with Axesso
+      - name: Refresh Amazon catalog with Axesso
         env:
-          AXESSO_RAPIDAPI_KEY: ${{ secrets.AMAZON_BETA_RAPIDAPI_KEY }}
+          AXESSO_RAPIDAPI_KEY: ${{ secrets.AXESSO_RAPIDAPI_KEY }}
           AXESSO_API_HOST: ${{ inputs.amazon_host || 'axesso-amazon-data-service1.p.rapidapi.com' }}
           AXESSO_BETA_QUERIES: ${{ inputs.amazon_queries || 'wireless headphones,wireless earbuds,laptop,smartphone,monitor,keyboard,mouse,air fryer,vacuum cleaner,running shoes,backpack,coffee maker' }}
           AXESSO_COUNTRY: ${{ inputs.amazon_country || 'US' }}
@@ -76,7 +75,7 @@ jobs:
       - name: Generate mock supplier API
         run: node collector/mock-api.js
 
-      - name: Commit catalog and beta API data
+      - name: Commit catalog and Amazon API data
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
