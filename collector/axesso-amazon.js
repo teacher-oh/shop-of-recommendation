@@ -5,7 +5,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
 
-const HOST = process.env.AXESSO_API_HOST || 'axesso-amazon-data-service1.p.rapidapi.com';
+const HOST = process.env.AXESSO_API_HOST || 'axesso-axesso-amazon-data-service-v1.p.rapidapi.com';
 const BASE = (process.env.AXESSO_API_BASE || `https://${HOST}`).replace(/\/$/, '');
 const KEY = process.env.AXESSO_RAPIDAPI_KEY || '';
 const COUNTRY = process.env.AXESSO_COUNTRY || 'US';
@@ -26,9 +26,30 @@ function number(value) {
   return Number.isFinite(n) ? n : null;
 }
 
+function rating5(value) {
+  if (value === undefined || value === null || value === '') return null;
+  if (typeof value === 'number') return Number.isFinite(value) ? value : null;
+  const match = String(value).match(/\d+(?:\.\d+)?/);
+  if (!match) return null;
+  const n = Number(match[0]);
+  return Number.isFinite(n) && n >= 0 && n <= 5 ? n : null;
+}
+
 function findAsin(value) {
-  const match = String(value || '').match(/(?:dp\/|gp\/product\/|asin\/|ASIN[:=]\s*)([A-Z0-9]{10})/i);
-  return match ? match[1].toUpperCase() : (String(value || '').match(/\b[A-Z0-9]{10}\b/) || [])[0] || null;
+  if (!value) return null;
+  if (typeof value === 'object') {
+    for (const key of ['asin', 'ASIN', 'productAsin', 'productASIN']) {
+      const direct = String(value[key] || '').match(/\b[A-Z0-9]{10}\b/i);
+      if (direct) return direct[0].toUpperCase();
+    }
+    for (const child of Object.values(value)) {
+      const nested = findAsin(child);
+      if (nested) return nested;
+    }
+  }
+  const text = String(value);
+  const match = text.match(/(?:dp\/|gp\/product\/|asin\/|ASIN[:=]\s*)([A-Z0-9]{10})/i) || text.match(/\b[A-Z0-9]{10}\b/);
+  return match ? (match[1] || match[0]).toUpperCase() : null;
 }
 
 async function getJson(endpoint, params, attempts = 2) {
@@ -68,9 +89,9 @@ async function getJson(endpoint, params, attempts = 2) {
 }
 
 function normalizeDetail(detail, asin, query) {
-  const rating = number(first(detail.productRating, detail.product_rating, detail.rating));
-  const reviewCount = number(first(detail.countReview, detail.reviewCount, detail.review_count)) || 0;
-  const price = number(first(detail.price, detail.retailPrice, detail.currentPrice));
+  const rating = rating5(first(detail.productRating, detail.product_rating, detail.rating));
+  const reviewCount = number(first(detail.countReview, detail.reviewCount, detail.review_count));
+  const price = number(first(detail.price, detail.currentPrice, detail.retailPrice));
   const title = first(detail.productTitle, detail.product_title, detail.title, `Amazon product ${asin}`);
   const url = first(detail.url, detail.productUrl, `https://www.amazon.${DOMAIN}/dp/${asin}`);
 
@@ -83,13 +104,13 @@ function normalizeDetail(detail, asin, query) {
     name: title,
     image: first(detail.image, detail.imageUrl, detail.productImage, detail.product_photo, ''),
     price,
-    currency: 'USD',
+    currency: COUNTRY === 'US' ? 'USD' : first(detail.currency, null),
     rating,
     ratingCount: reviewCount,
     reviewCount,
     reviews: reviewCount,
     url,
-    description: first(detail.description, detail.productDescription, (detail.features || []).join?.(' '), ''),
+    description: first(detail.description, detail.productDescription, Array.isArray(detail.features) ? detail.features.join(' ') : '', ''),
     category: first(detail.category, detail.categoryName, 'etc'),
     country: COUNTRY,
     isPrime: Boolean(detail.prime),
@@ -137,8 +158,6 @@ async function main() {
   const stats = { searchCalls: 0, detailCalls: 0, productsFound: 0, errors: [] };
   const candidates = new Map();
 
-  // Axesso's documented keyword-search endpoint returns product references/ASINs.
-  // Product lookup then gives the richer fields used by the site's evaluator.
   for (const query of QUERIES) {
     for (let page = 1; page <= PAGES && candidates.size < MAX_PRODUCTS; page += 1) {
       try {
@@ -150,12 +169,13 @@ async function main() {
           sortBy: 'relevanceblender'
         });
         stats.searchCalls += 1;
-        for (const item of extractSearchItems(json)) {
+        const items = extractSearchItems(json);
+        for (const item of items) {
           const asin = findAsin(item);
           if (asin) candidates.set(asin, { asin, query });
           if (candidates.size >= MAX_PRODUCTS) break;
         }
-        if (!extractSearchItems(json).length) break;
+        if (!items.length) break;
       } catch (error) {
         stats.errors.push({ endpoint: 'search', query, page, status: error.status || null, message: error.message });
       }
