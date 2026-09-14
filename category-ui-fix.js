@@ -15,8 +15,7 @@
   if(typeof renderCategories==='function') renderCategories();
 
   // The catalog renderer originally requested every product image eagerly.
-  // 804 products can therefore create hundreds of simultaneous image requests.
-  // Keep all products, but make their images lazy so the catalog itself becomes usable first.
+  // Keep the catalog usable first; images load as cards enter the viewport.
   if(typeof window.productCard==='function'){
     const originalProductCard=window.productCard;
     window.productCard=function(p){
@@ -24,8 +23,15 @@
     };
   }
 
+  // High-precision category correction: title/product signals override bad source labels.
+  if(!document.querySelector('script[data-sor-category-audit]')){
+    const s=document.createElement('script');
+    s.src='category-audit.js';
+    s.dataset.sorCategoryAudit='1';
+    document.body.appendChild(s);
+  }
+
   // score.js is the calculation engine; score-ui.js only paints its result.
-  // Restore the display layer without bringing back the body-wide MutationObserver.
   if(!document.querySelector('script[data-sor-score-ui]')){
     const s=document.createElement('script');
     s.src='score-ui.js';
