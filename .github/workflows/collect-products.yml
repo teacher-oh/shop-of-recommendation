@@ -28,7 +28,7 @@ on:
       amazon_host:
         description: 'Axesso RapidAPI host'
         required: false
-        default: 'axesso-amazon-data-service1.p.rapidapi.com'
+        default: 'axesso-axesso-amazon-data-service-v1.p.rapidapi.com'
   push:
     paths:
       - 'collector/refresh-dummyjson.js'
@@ -63,7 +63,7 @@ jobs:
       - name: Refresh Amazon catalog with Axesso
         env:
           AXESSO_RAPIDAPI_KEY: ${{ secrets.AXESSO_RAPIDAPI_KEY }}
-          AXESSO_API_HOST: ${{ inputs.amazon_host || 'axesso-amazon-data-service1.p.rapidapi.com' }}
+          AXESSO_API_HOST: ${{ inputs.amazon_host || 'axesso-axesso-amazon-data-service-v1.p.rapidapi.com' }}
           AXESSO_BETA_QUERIES: ${{ inputs.amazon_queries || 'wireless headphones,wireless earbuds,laptop,smartphone,monitor,keyboard,mouse,air fryer,vacuum cleaner,running shoes,backpack,coffee maker' }}
           AXESSO_COUNTRY: ${{ inputs.amazon_country || 'US' }}
           AXESSO_DOMAIN: 'com'
