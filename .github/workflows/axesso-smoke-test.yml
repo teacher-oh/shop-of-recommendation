@@ -23,11 +23,18 @@ jobs:
         run: |
           node <<'NODE'
           const fs = require('fs');
+
           const hosts = [
             'axesso-amazon-data-service1.p.rapidapi.com',
             'axesso-axesso-amazon-data-service-v1.p.rapidapi.com'
           ];
           const out = { testedAt: new Date().toISOString(), query: 'wireless headphones', hosts: [] };
+
+          function findAsin(value) {
+            const text = typeof value === 'string' ? value : JSON.stringify(value || '');
+            const m = text.match(/(?:dp\\/|gp\\/product\\/|asin\\/|ASIN[:=]\\s*)([A-Z0-9]{10})/i) || text.match(/\\b[A-Z0-9]{10}\\b/);
+            return m ? (m[1] || m[0]).toUpperCase() : null;
+          }
 
           async function call(host, endpoint, params) {
             const url = new URL(`https://${host}${endpoint}`);
@@ -38,57 +45,73 @@ jobs:
               'x-rapidapi-host': host
             }});
             const text = await r.text();
-            let body; try { body = JSON.parse(text); } catch { body = { raw: text.slice(0, 300) }; }
+            let body;
+            try { body = JSON.parse(text); } catch { body = { raw: text.slice(0, 500) }; }
             return { status: r.status, ok: r.ok, body };
           }
 
-          for (const host of hosts) {
-            const row = { host, search: null, detail: null };
-            try {
-              const search = await call(host, '/amz/amazon-search-by-keyword', {
-                keyword: 'wireless headphones', domainCode: 'com', sortBy: 'relevanceblender', numberOfProducts: 3
-              });
-              row.search = { status: search.status, ok: search.ok };
-              if (search.ok) {
+          (async () => {
+            for (const host of hosts) {
+              const row = { host, search: null, detail: null };
+              try {
+                const search = await call(host, '/amz/amazon-search-by-keyword-asin', {
+                  keyword: 'wireless headphones', domainCode: 'com', sortBy: 'relevanceblender', numberOfProducts: 3, page: 1
+                });
                 const products = search.body?.foundProducts || search.body?.data?.foundProducts || [];
-                row.search.resultCount = Array.isArray(products) ? products.length : 0;
-                const first = Array.isArray(products) ? products[0] : null;
-                const m = String(first || '').match(/(?:dp\/|gp\/product\/|asin\/|ASIN[:=]\s*)([A-Z0-9]{10})/i) || String(first || '').match(/\b[A-Z0-9]{10}\b/);
-                const asin = m ? (m[1] || m[0]).toUpperCase() : null;
-                row.search.asin = asin;
-                if (asin) {
-                  const detail = await call(host, '/amz/amazon-lookup-product', { url: `https://www.amazon.com/dp/${asin}` });
-                  row.detail = { status: detail.status, ok: detail.ok };
-                  if (detail.ok) {
-                    const d = detail.body?.data || detail.body || {};
-                    row.detail.fields = {
-                      asin: d.asin || asin,
-                      title: d.productTitle || null,
-                      price: d.price ?? null,
-                      rating: d.productRating || null,
-                      reviewCount: d.countReview ?? null,
-                      prime: d.prime ?? null,
-                      seller: d.soldBy || null,
-                      fulfilledBy: d.fulfilledBy || null,
-                      availability: d.warehouseAvailability || null
-                    };
+                row.search = {
+                  status: search.status,
+                  ok: search.ok,
+                  resultCount: Array.isArray(products) ? products.length : 0
+                };
+                if (search.ok && Array.isArray(products) && products.length) {
+                  const asin = findAsin(products[0]);
+                  row.search.asin = asin;
+                  if (asin) {
+                    const detail = await call(host, '/amz/amazon-lookup-product', {
+                      url: `https://www.amazon.com/dp/${asin}`
+                    });
+                    row.detail = { status: detail.status, ok: detail.ok };
+                    if (detail.ok) {
+                      const d = detail.body?.data || detail.body || {};
+                      row.detail.fields = {
+                        asin: d.asin || asin,
+                        title: d.productTitle || null,
+                        price: d.price ?? null,
+                        rating: d.productRating || null,
+                        reviewCount: d.countReview ?? null,
+                        prime: d.prime ?? null,
+                        seller: d.soldBy || null,
+                        fulfilledBy: d.fulfilledBy || null,
+                        availability: d.warehouseAvailability || null
+                      };
+                    }
                   }
                 }
+              } catch (e) {
+                row.error = String(e.message || e);
               }
-            } catch (e) {
-              row.error = String(e.message || e);
+              out.hosts.push(row);
             }
-            out.hosts.push(row);
-          }
 
-          fs.writeFileSync('axesso-smoke-result.json', JSON.stringify(out, null, 2) + '\n');
-          console.log(JSON.stringify(out, null, 2));
+            const usable = out.hosts.find(h => h.search?.ok && h.search.resultCount > 0 && h.search.asin && h.detail?.ok);
+            if (!usable) {
+              throw new Error(`No Axesso host passed search+ASIN+detail smoke test: ${JSON.stringify(out)}`);
+            }
+
+            fs.writeFileSync('axesso-smoke-result.json', JSON.stringify(out, null, 2) + '\n');
+            console.log(JSON.stringify(out, null, 2));
+          })().catch(err => {
+            fs.writeFileSync('axesso-smoke-result.json', JSON.stringify({ ...out, fatal: String(err.message || err) }, null, 2) + '\n');
+            console.error(err);
+            process.exit(1);
+          });
           NODE
 
       - name: Save smoke result
+        if: always()
         run: |
           mkdir -p data
-          cp axesso-smoke-result.json data/axesso-smoke-result.json
+          if [ -f axesso-smoke-result.json ]; then cp axesso-smoke-result.json data/axesso-smoke-result.json; fi
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add data/axesso-smoke-result.json
