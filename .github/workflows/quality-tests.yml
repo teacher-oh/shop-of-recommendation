@@ -3,7 +3,7 @@ name: Quality tests
 on:
   push:
     paths:
-      - 'collector/axesso-amazon.js'
+      - '**.js'
       - 'evaluation/**'
       - '.github/workflows/quality-tests.yml'
   workflow_dispatch:
@@ -24,11 +24,14 @@ jobs:
         with:
           node-version: 22
 
-      - name: Syntax checks
+      - name: Syntax-check every JavaScript file
+        shell: bash
         run: |
-          node --check collector/axesso-amazon.js
-          node --check evaluation/validate.js
-          node --check evaluation/score.js
+          set -euo pipefail
+          while IFS= read -r -d '' file; do
+            echo "Checking $file"
+            node --check "$file"
+          done < <(find . -type f -name '*.js' -not -path './node_modules/*' -print0)
 
       - name: Deterministic evaluator tests
         run: node evaluation/validate.js
