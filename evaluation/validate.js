@@ -32,7 +32,6 @@ function compareIdentity(a, b) {
   return comparable.every(k => String(a[k]).toLowerCase() === String(b[k]).toLowerCase()) ? 'same' : 'different';
 }
 
-// Product-vs-product comparison: same detailed category, but never the same identity.
 function canCompareProducts(a, b) {
   if (!a || !b || !a.categoryKey || a.categoryKey !== b.categoryKey) return false;
   if (a.productId && b.productId) return a.productId !== b.productId;
@@ -78,7 +77,7 @@ function categorySafety(name, rawCategory) {
   const food = /(kiwi|fruit|food|snack|beverage)/.test(t);
   const cleaning = /(mop|걸레|밀대|broom|cleaning)/.test(t);
   const manicure = /(manicure|nail polish|매니큐어|nail care)/.test(t);
-  const automotive = /(car|자동차|vehicle|dash cam)/.test(t);
+  const automotive = /(car|자동차|vehicle|dash cam|automotive)/.test(t);
   return !(food && cleaning) && !(manicure && automotive);
 }
 
