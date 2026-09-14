@@ -32,4 +32,12 @@
     s.dataset.sorScoreUi='1';
     document.body.appendChild(s);
   }
+
+  // Add the browser-only API credential/settings panel.
+  if(!document.querySelector('script[data-sor-api-settings]')){
+    const s=document.createElement('script');
+    s.src='api-settings.js';
+    s.dataset.sorApiSettings='1';
+    document.body.appendChild(s);
+  }
 })();
