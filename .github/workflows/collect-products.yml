@@ -1,7 +1,7 @@
 name: Refresh product catalog
 
 # Beta Amazon integration: Product Search + Product Details + Reviews + Offers.
-# The API key stays in GitHub Actions secret AMAZON_RAPIDAPI_KEY.
+# The beta API key stays in GitHub Actions secret AMAZON_BETA_RAPIDAPI_KEY.
 on:
   workflow_dispatch:
     inputs:
@@ -78,7 +78,7 @@ jobs:
 
       - name: Refresh Amazon beta catalog
         env:
-          AMAZON_RAPIDAPI_KEY: ${{ secrets.AMAZON_RAPIDAPI_KEY }}
+          AMAZON_RAPIDAPI_KEY: ${{ secrets.AMAZON_BETA_RAPIDAPI_KEY }}
           AMAZON_API_HOST: ${{ inputs.amazon_host || 'real-time-amazon-data.p.rapidapi.com' }}
           AMAZON_BETA_QUERIES: ${{ inputs.amazon_queries || 'wireless headphones,wireless earbuds,laptop,smartphone,monitor,keyboard,mouse,air fryer,vacuum cleaner,running shoes,backpack,coffee maker' }}
           AMAZON_COUNTRY: ${{ inputs.amazon_country || 'US' }}
