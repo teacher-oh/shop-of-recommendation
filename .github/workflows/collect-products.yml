@@ -1,7 +1,7 @@
 name: Refresh product catalog
 
 # Amazon data is collected through Axesso Amazon Data Service.
-# Secrets are passed only through GitHub Actions.
+# Direct Axesso authentication is the default. RapidAPI remains optional in the collector.
 on:
   workflow_dispatch:
     inputs:
@@ -25,10 +25,14 @@ on:
         description: 'Maximum products to enrich with Axesso details'
         required: false
         default: '50'
-      amazon_host:
-        description: 'Axesso RapidAPI host'
+      axesso_api_base:
+        description: 'Axesso API base URL from the Axesso developer portal'
         required: false
-        default: 'axesso-axesso-amazon-data-service-v1.p.rapidapi.com'
+        default: ''
+      axesso_api_key_header:
+        description: 'Direct Axesso API key header name'
+        required: false
+        default: 'Ocp-Apim-Subscription-Key'
   push:
     paths:
       - 'collector/refresh-dummyjson.js'
@@ -60,10 +64,12 @@ jobs:
           KAKAO_REST_API_KEY: ${{ secrets.KAKAO_REST_API_KEY }}
         run: node collector/refresh-dummyjson.js
 
-      - name: Refresh Amazon catalog with Axesso
+      - name: Refresh Amazon catalog with Axesso direct API
         env:
-          AXESSO_RAPIDAPI_KEY: ${{ secrets.AXESSO_RAPIDAPI_KEY }}
-          AXESSO_API_HOST: ${{ inputs.amazon_host || 'axesso-axesso-amazon-data-service-v1.p.rapidapi.com' }}
+          AXESSO_MODE: direct
+          AXESSO_API_KEY: ${{ secrets.AXESSO_API_KEY }}
+          AXESSO_API_BASE: ${{ inputs.axesso_api_base || secrets.AXESSO_API_BASE }}
+          AXESSO_API_KEY_HEADER: ${{ inputs.axesso_api_key_header || 'Ocp-Apim-Subscription-Key' }}
           AXESSO_BETA_QUERIES: ${{ inputs.amazon_queries || 'wireless headphones,wireless earbuds,laptop,smartphone,monitor,keyboard,mouse,air fryer,vacuum cleaner,running shoes,backpack,coffee maker' }}
           AXESSO_COUNTRY: ${{ inputs.amazon_country || 'US' }}
           AXESSO_DOMAIN: 'com'
