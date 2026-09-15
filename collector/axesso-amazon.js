@@ -1,13 +1,13 @@
-// Axesso Amazon Data Service beta collector.
-// Uses GitHub Actions secret AXESSO_RAPIDAPI_KEY.
-// Beta focus: real Amazon search + product detail data, stored in the existing catalog shape.
+// Axesso Amazon Data Service collector.
+// Direct Axesso mode is the default; RapidAPI mode remains optional for compatibility.
 
 const fs = require('node:fs');
 const path = require('node:path');
 
-const HOST = process.env.AXESSO_API_HOST || 'axesso-axesso-amazon-data-service-v1.p.rapidapi.com';
-const BASE = (process.env.AXESSO_API_BASE || `https://${HOST}`).replace(/\/$/, '');
-const KEY = process.env.AXESSO_RAPIDAPI_KEY || '';
+const MODE = String(process.env.AXESSO_MODE || 'direct').toLowerCase();
+const HOST = process.env.AXESSO_API_HOST || '';
+const BASE = (process.env.AXESSO_API_BASE || (HOST ? `https://${HOST}` : '')).replace(/\/$/, '');
+const KEY = process.env.AXESSO_API_KEY || process.env.AXESSO_RAPIDAPI_KEY || '';
 const COUNTRY = process.env.AXESSO_COUNTRY || 'US';
 const DOMAIN = process.env.AXESSO_DOMAIN || (COUNTRY === 'US' ? 'com' : COUNTRY.toLowerCase());
 const QUERIES = String(process.env.AXESSO_BETA_QUERIES || 'wireless headphones,wireless earbuds,laptop,smartphone,monitor,keyboard,mouse,air fryer,vacuum cleaner,running shoes,backpack,coffee maker')
@@ -52,7 +52,22 @@ function findAsin(value) {
   return match ? (match[1] || match[0]).toUpperCase() : null;
 }
 
+function authHeaders() {
+  const headers = { Accept: 'application/json' };
+  if (MODE === 'rapidapi') {
+    headers['X-RapidAPI-Key'] = process.env.AXESSO_RAPIDAPI_KEY || '';
+    if (HOST) headers['X-RapidAPI-Host'] = HOST;
+    return headers;
+  }
+  // Direct Axesso is normally provisioned from its own developer portal.
+  // Keep the header configurable so we never hard-code an undocumented scheme.
+  const headerName = process.env.AXESSO_API_KEY_HEADER || 'Ocp-Apim-Subscription-Key';
+  if (KEY) headers[headerName] = KEY;
+  return headers;
+}
+
 async function getJson(endpoint, params, attempts = 2) {
+  if (!BASE) throw new Error('AXESSO_API_BASE is required in direct mode.');
   const url = new URL(`${BASE}${endpoint}`);
   for (const [key, value] of Object.entries(params || {})) {
     if (value !== undefined && value !== null && value !== '') url.searchParams.set(key, String(value));
@@ -61,13 +76,7 @@ async function getJson(endpoint, params, attempts = 2) {
   let lastError;
   for (let attempt = 1; attempt <= attempts; attempt += 1) {
     try {
-      const response = await fetch(url, {
-        headers: {
-          Accept: 'application/json',
-          'X-RapidAPI-Key': KEY,
-          'X-RapidAPI-Host': HOST
-        }
-      });
+      const response = await fetch(url, { headers: authHeaders() });
       const text = await response.text();
       let json = null;
       try { json = text ? JSON.parse(text) : null; } catch { json = { raw: text }; }
@@ -119,7 +128,7 @@ function normalizeDetail(detail, asin, query) {
     fulfilledBy: first(detail.fulfilledBy, ''),
     availability: first(detail.warehouseAvailability, detail.availability, ''),
     evidence: {
-      source: 'Axesso Amazon Data Service via RapidAPI',
+      source: MODE === 'rapidapi' ? 'Axesso Amazon Data Service via RapidAPI' : 'Axesso Amazon Data Service direct API',
       retrievedAt: new Date().toISOString(),
       marketplace: COUNTRY,
       query,
@@ -142,16 +151,18 @@ function normalizeDetail(detail, asin, query) {
 
 function extractSearchItems(json) {
   const data = json?.data ?? json;
-  const values = Array.isArray(data?.foundProducts) ? data.foundProducts :
+  return Array.isArray(data?.foundProducts) ? data.foundProducts :
     Array.isArray(json?.foundProducts) ? json.foundProducts :
     Array.isArray(data) ? data : [];
-  return values;
 }
 
 async function main() {
   if (!KEY) {
-    console.log('AXESSO_RAPIDAPI_KEY is not configured; leaving existing catalog unchanged.');
+    console.log('Axesso API key is not configured; leaving existing catalog unchanged.');
     return;
+  }
+  if (!BASE) {
+    throw new Error('AXESSO_API_BASE is not configured for direct Axesso mode.');
   }
 
   const startedAt = new Date().toISOString();
@@ -192,8 +203,7 @@ async function main() {
       });
       stats.detailCalls += 1;
       const detail = json?.data ?? json;
-      const product = normalizeDetail(detail, asin, query);
-      products.push(product);
+      products.push(normalizeDetail(detail, asin, query));
     } catch (error) {
       stats.errors.push({ endpoint: 'product-detail', asin, status: error.status || null, message: error.message });
     }
@@ -202,32 +212,23 @@ async function main() {
 
   stats.productsFound = products.length;
   const retrievedAt = new Date().toISOString();
-
   const file = path.join(process.cwd(), 'data', 'products.json');
   const existing = JSON.parse(fs.readFileSync(file, 'utf8'));
   const list = Array.isArray(existing) ? existing : (Array.isArray(existing.products) ? existing.products : []);
   const map = new Map(list.map(p => [p.id, p]));
   for (const product of products) map.set(product.id, product);
-
   const output = Array.isArray(existing)
     ? [...map.values()]
     : { ...existing, generatedAt: retrievedAt, updatedAt: retrievedAt, count: map.size, products: [...map.values()] };
   fs.writeFileSync(file, JSON.stringify(output, null, 2) + '\n');
 
-  const betaFile = path.join(process.cwd(), 'data', 'amazon-beta.json');
-  fs.writeFileSync(betaFile, JSON.stringify({
-    provider: 'axesso-amazon-data-service',
-    generatedAt: retrievedAt,
-    startedAt,
-    marketplace: COUNTRY,
-    domain: DOMAIN,
-    queries: QUERIES,
+  fs.writeFileSync(path.join(process.cwd(), 'data', 'amazon-beta.json'), JSON.stringify({
+    provider: 'axesso-amazon-data-service', mode: MODE, generatedAt: retrievedAt, startedAt,
+    marketplace: COUNTRY, domain: DOMAIN, queries: QUERIES,
     config: { pages: PAGES, maxProducts: MAX_PRODUCTS, detailLimit: DETAIL_LIMIT, delayMs: DELAY_MS },
-    stats,
-    products
+    stats, products
   }, null, 2) + '\n');
-
-  console.log(JSON.stringify({ ok: true, provider: 'axesso-amazon-data-service', productsImported: products.length, totalCatalog: map.size, ...stats }, null, 2));
+  console.log(JSON.stringify({ ok: true, provider: 'axesso-amazon-data-service', mode: MODE, productsImported: products.length, totalCatalog: map.size, ...stats }, null, 2));
 }
 
 main().catch(error => {
