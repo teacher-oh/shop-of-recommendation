@@ -1,7 +1,7 @@
 name: Refresh product catalog
 
-# Amazon data is collected through Axesso Amazon Data Service.
-# Direct Axesso authentication is the default. RapidAPI remains optional in the collector.
+# Amazon data is collected through Axesso Amazon Data Service via RapidAPI.
+# The RapidAPI key is stored only in GitHub Actions Secrets.
 on:
   workflow_dispatch:
     inputs:
@@ -25,14 +25,10 @@ on:
         description: 'Maximum products to enrich with Axesso details'
         required: false
         default: '50'
-      axesso_api_base:
-        description: 'Axesso API base URL from the Axesso developer portal'
+      axesso_api_host:
+        description: 'RapidAPI host for Axesso'
         required: false
-        default: ''
-      axesso_api_key_header:
-        description: 'Direct Axesso API key header name'
-        required: false
-        default: 'Ocp-Apim-Subscription-Key'
+        default: 'axesso-amazon-data-service1.p.rapidapi.com'
   push:
     paths:
       - 'collector/refresh-dummyjson.js'
@@ -64,12 +60,11 @@ jobs:
           KAKAO_REST_API_KEY: ${{ secrets.KAKAO_REST_API_KEY }}
         run: node collector/refresh-dummyjson.js
 
-      - name: Refresh Amazon catalog with Axesso direct API
+      - name: Refresh Amazon catalog with Axesso via RapidAPI
         env:
-          AXESSO_MODE: direct
-          AXESSO_API_KEY: ${{ secrets.AXESSO_API_KEY }}
-          AXESSO_API_BASE: ${{ inputs.axesso_api_base || secrets.AXESSO_API_BASE }}
-          AXESSO_API_KEY_HEADER: ${{ inputs.axesso_api_key_header || 'Ocp-Apim-Subscription-Key' }}
+          AXESSO_MODE: rapidapi
+          AXESSO_RAPIDAPI_KEY: ${{ secrets.AXESSO_RAPIDAPI_KEY }}
+          AXESSO_API_HOST: ${{ inputs.axesso_api_host || 'axesso-amazon-data-service1.p.rapidapi.com' }}
           AXESSO_BETA_QUERIES: ${{ inputs.amazon_queries || 'wireless headphones,wireless earbuds,laptop,smartphone,monitor,keyboard,mouse,air fryer,vacuum cleaner,running shoes,backpack,coffee maker' }}
           AXESSO_COUNTRY: ${{ inputs.amazon_country || 'US' }}
           AXESSO_DOMAIN: 'com'
