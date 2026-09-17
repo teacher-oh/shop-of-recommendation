@@ -21,13 +21,13 @@
     };
   }
 
-  // v2 is deliberately loaded after app.js so it can audit the actual loaded catalog.
-  if(!document.querySelector('script[data-sor-category-audit]')){
-    const s=document.createElement('script');
-    s.src='category-audit-v2.js';
-    s.dataset.sorCategoryAudit='1';
-    document.body.appendChild(s);
-  }
+  /*
+   * Do not attach a productGrid-wide MutationObserver here.
+   * The previous category audit observer reacted to every filter redraw,
+   * changed the cards again, and could create a render/score feedback loop
+   * when BEST was selected. Category auditing remains available separately,
+   * but must not run continuously on the live grid.
+   */
 
   if(!document.querySelector('script[data-sor-score-ui]')){
     const s=document.createElement('script');
