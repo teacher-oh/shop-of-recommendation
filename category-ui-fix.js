@@ -21,14 +21,6 @@
     };
   }
 
-  /*
-   * Do not attach a productGrid-wide MutationObserver here.
-   * The previous category audit observer reacted to every filter redraw,
-   * changed the cards again, and could create a render/score feedback loop
-   * when BEST was selected. Category auditing remains available separately,
-   * but must not run continuously on the live grid.
-   */
-
   if(!document.querySelector('script[data-sor-score-ui]')){
     const s=document.createElement('script');
     s.src='score-ui.js';
@@ -40,6 +32,13 @@
     const s=document.createElement('script');
     s.src='api-settings.js';
     s.dataset.sorApiSettings='1';
+    document.body.appendChild(s);
+  }
+
+  if(!document.querySelector('script[data-sor-search-fix]')){
+    const s=document.createElement('script');
+    s.src='search-fix.js';
+    s.dataset.sorSearchFix='1';
     document.body.appendChild(s);
   }
 })();
