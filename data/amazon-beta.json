@@ -1,8 +1,8 @@
 {
   "provider": "axesso-amazon-data-service",
   "mode": "rapidapi",
-  "generatedAt": "2026-09-17T11:18:17.929Z",
-  "startedAt": "2026-09-17T11:17:39.654Z",
+  "generatedAt": "2026-09-21T18:30:02.743Z",
+  "startedAt": "2026-09-21T18:29:23.349Z",
   "marketplace": "US",
   "domain": "com",
   "queries": [
@@ -83,120 +83,120 @@
         "endpoint": "search",
         "query": "smartphone",
         "page": 2,
-        "status": 429,
-        "message": "Axesso 429 Too Many Requests"
-      },
-      {
-        "endpoint": "search",
-        "query": "monitor",
-        "page": 1,
         "status": 404,
         "message": "Axesso 404 Not Found"
       },
       {
         "endpoint": "search",
         "query": "monitor",
-        "page": 2,
+        "page": 1,
         "status": 429,
         "message": "Axesso 429 Too Many Requests"
       },
       {
         "endpoint": "search",
-        "query": "keyboard",
-        "page": 1,
+        "query": "monitor",
+        "page": 2,
         "status": 404,
         "message": "Axesso 404 Not Found"
       },
       {
         "endpoint": "search",
         "query": "keyboard",
-        "page": 2,
+        "page": 1,
         "status": 429,
         "message": "Axesso 429 Too Many Requests"
       },
       {
         "endpoint": "search",
-        "query": "mouse",
-        "page": 1,
+        "query": "keyboard",
+        "page": 2,
         "status": 404,
         "message": "Axesso 404 Not Found"
       },
       {
         "endpoint": "search",
         "query": "mouse",
-        "page": 2,
+        "page": 1,
         "status": 429,
         "message": "Axesso 429 Too Many Requests"
       },
       {
         "endpoint": "search",
-        "query": "air fryer",
-        "page": 1,
+        "query": "mouse",
+        "page": 2,
         "status": 404,
         "message": "Axesso 404 Not Found"
       },
       {
         "endpoint": "search",
         "query": "air fryer",
-        "page": 2,
+        "page": 1,
         "status": 429,
         "message": "Axesso 429 Too Many Requests"
       },
       {
         "endpoint": "search",
-        "query": "vacuum cleaner",
-        "page": 1,
+        "query": "air fryer",
+        "page": 2,
         "status": 404,
         "message": "Axesso 404 Not Found"
       },
       {
         "endpoint": "search",
         "query": "vacuum cleaner",
-        "page": 2,
+        "page": 1,
         "status": 429,
         "message": "Axesso 429 Too Many Requests"
       },
       {
         "endpoint": "search",
-        "query": "running shoes",
-        "page": 1,
+        "query": "vacuum cleaner",
+        "page": 2,
         "status": 404,
         "message": "Axesso 404 Not Found"
       },
       {
         "endpoint": "search",
         "query": "running shoes",
-        "page": 2,
+        "page": 1,
         "status": 429,
         "message": "Axesso 429 Too Many Requests"
       },
       {
         "endpoint": "search",
-        "query": "backpack",
-        "page": 1,
+        "query": "running shoes",
+        "page": 2,
         "status": 404,
         "message": "Axesso 404 Not Found"
       },
       {
         "endpoint": "search",
         "query": "backpack",
-        "page": 2,
+        "page": 1,
         "status": 429,
         "message": "Axesso 429 Too Many Requests"
       },
       {
         "endpoint": "search",
-        "query": "coffee maker",
-        "page": 1,
+        "query": "backpack",
+        "page": 2,
         "status": 404,
         "message": "Axesso 404 Not Found"
       },
       {
         "endpoint": "search",
         "query": "coffee maker",
-        "page": 2,
+        "page": 1,
         "status": 429,
         "message": "Axesso 429 Too Many Requests"
+      },
+      {
+        "endpoint": "search",
+        "query": "coffee maker",
+        "page": 2,
+        "status": 404,
+        "message": "Axesso 404 Not Found"
       }
     ]
   },
