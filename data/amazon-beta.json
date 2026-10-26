@@ -1,8 +1,8 @@
 {
   "provider": "axesso-amazon-data-service",
   "mode": "rapidapi",
-  "generatedAt": "2026-10-19T22:21:51.912Z",
-  "startedAt": "2026-10-19T22:21:12.897Z",
+  "generatedAt": "2026-10-26T22:40:25.137Z",
+  "startedAt": "2026-10-26T22:39:46.206Z",
   "marketplace": "US",
   "domain": "com",
   "queries": [
@@ -69,134 +69,134 @@
         "endpoint": "search",
         "query": "laptop",
         "page": 2,
-        "status": 429,
-        "message": "Axesso 429 Too Many Requests"
-      },
-      {
-        "endpoint": "search",
-        "query": "smartphone",
-        "page": 1,
         "status": 404,
         "message": "Axesso 404 Not Found"
       },
       {
         "endpoint": "search",
         "query": "smartphone",
-        "page": 2,
+        "page": 1,
         "status": 429,
         "message": "Axesso 429 Too Many Requests"
       },
       {
         "endpoint": "search",
-        "query": "monitor",
-        "page": 1,
+        "query": "smartphone",
+        "page": 2,
         "status": 404,
         "message": "Axesso 404 Not Found"
       },
       {
         "endpoint": "search",
         "query": "monitor",
-        "page": 2,
+        "page": 1,
         "status": 429,
         "message": "Axesso 429 Too Many Requests"
       },
       {
         "endpoint": "search",
-        "query": "keyboard",
-        "page": 1,
+        "query": "monitor",
+        "page": 2,
         "status": 404,
         "message": "Axesso 404 Not Found"
       },
       {
         "endpoint": "search",
         "query": "keyboard",
-        "page": 2,
+        "page": 1,
         "status": 429,
         "message": "Axesso 429 Too Many Requests"
       },
       {
         "endpoint": "search",
-        "query": "mouse",
-        "page": 1,
+        "query": "keyboard",
+        "page": 2,
         "status": 404,
         "message": "Axesso 404 Not Found"
       },
       {
         "endpoint": "search",
         "query": "mouse",
-        "page": 2,
+        "page": 1,
         "status": 429,
         "message": "Axesso 429 Too Many Requests"
       },
       {
         "endpoint": "search",
-        "query": "air fryer",
-        "page": 1,
+        "query": "mouse",
+        "page": 2,
         "status": 404,
         "message": "Axesso 404 Not Found"
       },
       {
         "endpoint": "search",
         "query": "air fryer",
-        "page": 2,
+        "page": 1,
         "status": 429,
         "message": "Axesso 429 Too Many Requests"
       },
       {
         "endpoint": "search",
-        "query": "vacuum cleaner",
-        "page": 1,
+        "query": "air fryer",
+        "page": 2,
         "status": 404,
         "message": "Axesso 404 Not Found"
       },
       {
         "endpoint": "search",
         "query": "vacuum cleaner",
-        "page": 2,
+        "page": 1,
         "status": 429,
         "message": "Axesso 429 Too Many Requests"
       },
       {
         "endpoint": "search",
-        "query": "running shoes",
-        "page": 1,
+        "query": "vacuum cleaner",
+        "page": 2,
         "status": 404,
         "message": "Axesso 404 Not Found"
       },
       {
         "endpoint": "search",
         "query": "running shoes",
-        "page": 2,
+        "page": 1,
         "status": 429,
         "message": "Axesso 429 Too Many Requests"
       },
       {
         "endpoint": "search",
-        "query": "backpack",
-        "page": 1,
+        "query": "running shoes",
+        "page": 2,
         "status": 404,
         "message": "Axesso 404 Not Found"
       },
       {
         "endpoint": "search",
         "query": "backpack",
-        "page": 2,
+        "page": 1,
         "status": 429,
         "message": "Axesso 429 Too Many Requests"
       },
       {
         "endpoint": "search",
-        "query": "coffee maker",
-        "page": 1,
+        "query": "backpack",
+        "page": 2,
         "status": 404,
         "message": "Axesso 404 Not Found"
       },
       {
         "endpoint": "search",
         "query": "coffee maker",
-        "page": 2,
+        "page": 1,
         "status": 429,
         "message": "Axesso 429 Too Many Requests"
+      },
+      {
+        "endpoint": "search",
+        "query": "coffee maker",
+        "page": 2,
+        "status": 404,
+        "message": "Axesso 404 Not Found"
       }
     ]
   },
